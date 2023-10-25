@@ -30,7 +30,7 @@ function CreatePost() {
             <FormControl>
               <FormLabel htmlFor="title">What is happening?</FormLabel>
               <Textarea id="title" placeholder="What is happening?" />
-              <Input type="file" />
+              <Input type="file" mt={2} />
             </FormControl>
           </ModalBody>
           <ModalFooter>

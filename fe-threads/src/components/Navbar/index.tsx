@@ -53,9 +53,6 @@ const Navbar = () => {
           </Link>
         ))}
       </Flex>
-      {/* <Button bg="green" color="white" w={"100%"} borderRadius={"15px"}>
-        Create Post
-      </Button> */}
       <CreatePost />
     </Box>
   );

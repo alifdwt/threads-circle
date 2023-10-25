@@ -17,6 +17,9 @@ export class Replies {
   @Column({ nullable: false })
   content: string;
 
+  @Column({ nullable: true })
+  image: string;
+
   @CreateDateColumn()
   created_at: Date;
 

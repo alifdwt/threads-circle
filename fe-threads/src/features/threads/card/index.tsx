@@ -1,4 +1,3 @@
-import ThreadCardType from "@/types/ThreadCard";
 import {
   Flex,
   Avatar,
@@ -9,49 +8,43 @@ import {
   Text,
   Image,
 } from "@chakra-ui/react";
-import { BsFillPatchCheckFill } from "react-icons/bs";
 import { BiLike, BiChat, BiShare } from "react-icons/bi";
+import ThreadAPI from "@/types/ThreadCardAPI";
 
-const ThreadContainer = (props: ThreadCardType) => {
-  const {
-    author_picture,
-    author_name,
-    author_username,
-    thread,
-    image,
-    likes_count,
-    replies_count,
-    is_verified,
-  } = props;
+const ThreadContainer = (props: ThreadAPI) => {
+  const { content, image, user, replies, updated_at, likes } = props;
 
   return (
     <Flex gap={3} p={3} borderBottom={"1px solid gray"}>
       <Box>
-        <Avatar name={author_name} src={author_picture} />
+        <Avatar name={user.full_name} src={user.profile_picture} />
       </Box>
       <Box>
         <Link>
           <Flex gap={1}>
-            <Heading size={"sm"}>{author_name}</Heading>
-            {is_verified && (
+            <Heading size={"sm"}>{user.full_name}</Heading>
+            {/* {is_verified && (
               <Icon as={BsFillPatchCheckFill} color={"blue.500"} />
-            )}
-            <Text color={"gray"}>@{author_username}</Text>
+            )} */}
+            <Text color={"gray"}>
+              @{user.username} ৹ {getDuration(updated_at)}
+            </Text>
           </Flex>
         </Link>
-        <Text>{TextWithAnchor({ text: thread })}</Text>
-        {image && <Image src={image} maxW={"300px"} />}
+        <Text>{TextWithAnchor({ text: content })}</Text>
+        {/* {image && <Image src={image} maxW={"300px"} />} */}
+        {image !== "null" && <Image src={image} maxW={"300px"} />}
         <Flex gap={4} mt={2} color={"gray"}>
           <Link>
             <Flex gap={1}>
               <Icon as={BiLike} color={"gray"} />
-              <Text>{likes_count}</Text>
+              <Text>{likes.length}</Text>
             </Flex>
           </Link>
           <Link>
             <Flex gap={1}>
               <Icon as={BiChat} color={"gray"} />
-              <Text>{replies_count}</Text>
+              <Text>{replies.length}</Text>
             </Flex>
           </Link>
           <Link>
@@ -83,6 +76,29 @@ const TextWithAnchor = ({ text }: { text: string }) => {
   });
 
   return renderWords;
+};
+
+const getDuration = (date: string) => {
+  const timeDifference = new Date().getTime() - new Date(date).getTime();
+  const months = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 30));
+  const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  const hours = Math.floor(
+    (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
+  const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+  if (months > 0) {
+    return `${months}m`;
+  } else if (days > 0) {
+    return `${days}d`;
+  } else if (hours > 0) {
+    return `${hours}h`;
+  } else if (minutes > 0) {
+    return `${minutes}ms`;
+  } else {
+    return `${seconds}s`;
+  }
 };
 
 export default ThreadContainer;

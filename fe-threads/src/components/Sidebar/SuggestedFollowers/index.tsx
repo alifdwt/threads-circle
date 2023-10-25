@@ -1,15 +1,8 @@
-import {
-  Box,
-  Heading,
-  Text,
-  Flex,
-  Avatar,
-  Button,
-  Link,
-} from "@chakra-ui/react";
+import { Box, Heading, Text, Flex, Avatar, Link } from "@chakra-ui/react";
 import { API } from "@/config/api";
 import UserListAPI from "@/types/UserListAPI";
 import { useEffect, useState } from "react";
+import FollowButton from "./FollowButton";
 
 // const users = await API.get("/users");
 
@@ -70,9 +63,7 @@ const SuggestedFollower = () => {
                   Follow
                 </Button>
               )} */}
-              <Button borderRadius={"15px"} variant={"outline"} color={"gray"}>
-                Following
-              </Button>
+              <FollowButton />
             </Box>
           </Flex>
         </Box>

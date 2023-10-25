@@ -1,24 +1,33 @@
 import { Flex } from "@chakra-ui/react";
 import CardProfile from "./ProfileSection";
 import SuggestedFollower from "./SuggestedFollowers";
+import { useState, useEffect } from "react";
 import { API } from "@/config/api";
+import ProfileId from "@/types/ProfileId";
+import UserListAPI from "@/types/UserListAPI";
+import userDummy from "@/mocks/user";
 
-const firstUserData = await API.get("/user/1");
-
-const Sidebar = () => {
-  const firstUser = firstUserData.data.data;
-  console.log(firstUser);
+const Sidebar = (props: ProfileId) => {
+  const { profileNum } = props;
+  const [profile, setProfile] = useState<UserListAPI>(userDummy);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await API.get(`/user/${profileNum}`);
+      setProfile(response.data.data);
+    };
+    fetchData();
+  });
   return (
     <Flex direction={"column"} gap={5}>
       <CardProfile
-        key={firstUser.id}
-        id={firstUser.id}
-        full_name={firstUser.full_name}
-        username={firstUser.username}
-        profile_picture={firstUser.profile_picture}
-        profile_description={firstUser.profile_description}
-        email={firstUser.email}
-        password={firstUser.password}
+        key={profile.id}
+        id={profile.id}
+        full_name={profile.full_name}
+        username={profile.username}
+        profile_picture={profile.profile_picture}
+        profile_description={profile.profile_description}
+        email={profile.email}
+        password={profile.password}
       />
       <SuggestedFollower />
     </Flex>

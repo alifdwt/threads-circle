@@ -13,6 +13,11 @@ export default new (class ThreadServices {
       const threads = await this.ThreadRepository.find({
         relations: {
           user: true,
+          replies: true,
+          likes: true,
+        },
+        order: {
+          created_at: "DESC",
         },
       });
 
@@ -37,6 +42,8 @@ export default new (class ThreadServices {
         },
         relations: {
           user: true,
+          replies: true,
+          likes: true,
         },
       });
 

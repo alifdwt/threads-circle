@@ -9,6 +9,7 @@ type ThreadCardType = {
   replies_count: number;
   is_verified: boolean;
   is_followed: boolean;
+  duration: string;
 };
 
 export default ThreadCardType;
