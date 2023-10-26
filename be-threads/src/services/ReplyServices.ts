@@ -51,6 +51,33 @@ export default new (class ReplyServices {
     }
   }
 
+  async getRepliesByThreadId(req: Request, res: Response): Promise<Response> {
+    try {
+      const threadId: number = parseInt(req.params.threadId);
+      const replies = await this.ReplyRepository.find({
+        where: {
+          thread: {
+            id: threadId,
+          },
+        },
+        relations: {
+          user: true,
+          thread: true,
+        },
+      });
+
+      if (replies.length <= 0) {
+        return res
+          .status(404)
+          .json({ code: 404, message: "Replies not found" });
+      }
+
+      return res.status(201).json({ code: 201, data: replies });
+    } catch (error) {
+      return res.status(500).json({ code: 500, error: error.message });
+    }
+  }
+
   async createReply(req: Request, res: Response): Promise<Response> {
     try {
       const data = req.body;

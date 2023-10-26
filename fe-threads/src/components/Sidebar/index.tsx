@@ -3,32 +3,29 @@ import CardProfile from "./ProfileSection";
 import SuggestedFollower from "./SuggestedFollowers";
 import { useState, useEffect } from "react";
 import { API } from "@/config/api";
-import ProfileId from "@/types/ProfileId";
 import UserListAPI from "@/types/UserListAPI";
 import userDummy from "@/mocks/user";
 
-const Sidebar = (props: ProfileId) => {
-  const { profileNum } = props;
-  const [profile, setProfile] = useState<UserListAPI>(userDummy);
+const Sidebar = () => {
+  useEffect(() => {
+    const storedProfile = localStorage.getItem("selectedProfile");
+    if (storedProfile) {
+      setSelectedProfile(JSON.parse(storedProfile));
+    }
+  }, []);
+
+  const [selectedProfile, setSelectedProfile] = useState<number>(1);
+  const [profile, setProfile] = useState<UserListAPI>(userDummy[0]);
   useEffect(() => {
     const fetchData = async () => {
-      const response = await API.get(`/user/${profileNum}`);
+      const response = await API.get(`/user/${selectedProfile}`);
       setProfile(response.data.data);
     };
     fetchData();
   });
   return (
     <Flex direction={"column"} gap={5}>
-      <CardProfile
-        key={profile.id}
-        id={profile.id}
-        full_name={profile.full_name}
-        username={profile.username}
-        profile_picture={profile.profile_picture}
-        profile_description={profile.profile_description}
-        email={profile.email}
-        password={profile.password}
-      />
+      <CardProfile {...profile} />
       <SuggestedFollower />
     </Flex>
   );

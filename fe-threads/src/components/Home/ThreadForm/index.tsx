@@ -20,7 +20,7 @@ type formInputData = {
 };
 
 const ThreadForm = (props: ProfileId) => {
-  const [profile, setProfile] = useState<UserListAPI>(userDummy);
+  const [profile, setProfile] = useState<UserListAPI>(userDummy[0]);
   const { profileNum } = props;
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +45,7 @@ const ThreadForm = (props: ProfileId) => {
 
   async function handlePost() {
     console.log(form);
-    await API.post("/thread", form);
+    await API.post("/thread", { ...form, userId: profileNum });
     // refetch()
   }
 
@@ -80,19 +80,19 @@ const ThreadForm = (props: ProfileId) => {
         />
       </InputGroup>
       <Flex justifyContent={"center"} mt={2}>
-        <Input
+        {/* <Input
           placeholder="userId"
           type="number"
           onChange={handleChange}
           name="userId"
           w={"20%"}
-        />
+        /> */}
         <Button
           h="1.75rem"
           size="sm"
           colorScheme="green"
           onClick={handlePost}
-          w={"20%"}
+          w={"100%"}
         >
           Post
         </Button>

@@ -6,6 +6,7 @@ import {
   Card,
   Flex,
   HStack,
+  Link,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -16,7 +17,7 @@ const CardProfile = (props: UserListAPI) => {
   return (
     <Card bg="whiteAlpha.200" p={4}>
       <Text color="white" fontWeight={"bold"}>
-        My Profile
+        Profile
       </Text>
       <Box
         pos="relative"
@@ -54,24 +55,31 @@ const CardProfile = (props: UserListAPI) => {
       </Flex>
 
       <Stack spacing={0}>
-        <Text
-          mt={3}
-          fontSize="lg"
-          fontWeight="semibold"
-          color="white"
-          display={"flex"}
-          alignItems={"center"}
-          gap={1}
-          mb={"-5px"}
-        >
-          {full_name}{" "}
-          <span style={{ color: "#1D9BF0" }}>
-            <VscVerifiedFilled />
-          </span>
-        </Text>
-        <Text fontSize="xs" color="whiteAlpha.600">
-          @{username}
-        </Text>
+        <Link href={`/profile/${username}`}>
+          <Text
+            mt={3}
+            fontSize="lg"
+            fontWeight="semibold"
+            color="white"
+            display={"flex"}
+            alignItems={"center"}
+            gap={1}
+            mb={"-5px"}
+            _hover={{ textDecoration: "underline" }}
+          >
+            {full_name}{" "}
+            <span style={{ color: "#1D9BF0" }}>
+              <VscVerifiedFilled />
+            </span>
+          </Text>
+          <Text
+            fontSize="xs"
+            color="whiteAlpha.600"
+            _hover={{ textDecoration: "underline" }}
+          >
+            @{username}
+          </Text>
+        </Link>
         <Text fontSize="sm" color="whiteAlpha.800" mb={"10px"}>
           {profile_description}
         </Text>

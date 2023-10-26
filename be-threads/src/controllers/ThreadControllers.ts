@@ -8,6 +8,12 @@ export default new (class ThreadController {
   getThreadById(req: Request, res: Response) {
     ThreadServices.getThreadById(req, res);
   }
+  getThreadsByUsername(req: Request, res: Response) {
+    ThreadServices.getThreadsByUsername(req, res);
+  }
+  getThreadsThatUserLiked(req: Request, res: Response) {
+    ThreadServices.getThreadsThatUserLiked(req, res);
+  }
   createThread(req: Request, res: Response) {
     ThreadServices.createThread(req, res);
   }

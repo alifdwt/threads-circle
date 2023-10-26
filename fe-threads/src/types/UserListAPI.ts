@@ -1,3 +1,6 @@
+import LikeAPI from "./LikeListAPI";
+import ThreadAPI from "./ThreadCardAPI";
+
 type UserListAPI = {
   id: number;
   email: string;
@@ -8,6 +11,8 @@ type UserListAPI = {
   username: string;
   created_at: string;
   updated_at: string;
+  threads?: ThreadAPI[];
+  likes?: LikeAPI[];
 };
 
 export default UserListAPI;

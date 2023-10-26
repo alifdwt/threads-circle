@@ -2,14 +2,15 @@ import HomeTimeline from "@/components/Home";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { API } from "@/config/api";
+import userDummy from "@/mocks/user";
 import UserListAPI from "@/types/UserListAPI";
 // import ProfileOptions from "@/components/Sidebar/ProfileOptions";
 import { Flex, Box, Select } from "@chakra-ui/react";
 import { ChangeEvent, useEffect, useState } from "react";
 
 const Home = () => {
-  const [selectedProfile, setSelectedProfile] = useState(1);
-  const [profiles, setProfiles] = useState([]);
+  const [selectedProfile, setSelectedProfile] = useState<number>(1);
+  const [profiles, setProfiles] = useState<UserListAPI[]>(userDummy);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +24,7 @@ const Home = () => {
     const selectedId = parseInt(e.target.value);
     setSelectedProfile(selectedId);
     localStorage.setItem("selectedProfile", JSON.stringify(selectedId));
+    window.location.href = "/home";
   }
 
   useEffect(() => {
@@ -48,7 +50,7 @@ const Home = () => {
           </option>
         ))}
       </Select>
-      <Box bg={"black"}>
+      <Box bg={"blackAlpha.900"}>
         <Flex color="white" p={"20px"} gap={4}>
           <Box flex={"1"}>
             <Navbar />
@@ -57,7 +59,7 @@ const Home = () => {
             <HomeTimeline profileNum={selectedProfile} />
           </Box>
           <Box flex={"1"}>
-            <Sidebar profileNum={selectedProfile} />
+            <Sidebar />
           </Box>
         </Flex>
       </Box>

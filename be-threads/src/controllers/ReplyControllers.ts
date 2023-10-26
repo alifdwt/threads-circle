@@ -8,6 +8,9 @@ export default new (class ReplyController {
   getReplyById(req: Request, res: Response) {
     ReplyServices.getReplyById(req, res);
   }
+  getRepliesByThreadId(req: Request, res: Response) {
+    ReplyServices.getRepliesByThreadId(req, res);
+  }
   createReply(req: Request, res: Response) {
     ReplyServices.createReply(req, res);
   }

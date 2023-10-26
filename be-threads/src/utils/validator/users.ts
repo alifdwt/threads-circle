@@ -9,4 +9,9 @@ const createUserSchema = Joi.object({
   profile_description: Joi.string(),
 });
 
-export default createUserSchema;
+const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(4).required(),
+});
+
+export { createUserSchema, loginSchema };

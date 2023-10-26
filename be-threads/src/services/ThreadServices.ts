@@ -14,7 +14,9 @@ export default new (class ThreadServices {
         relations: {
           user: true,
           replies: true,
-          likes: true,
+          likes: {
+            user: true,
+          },
         },
         order: {
           created_at: "DESC",
@@ -43,7 +45,9 @@ export default new (class ThreadServices {
         relations: {
           user: true,
           replies: true,
-          likes: true,
+          likes: {
+            user: true,
+          },
         },
       });
 
@@ -52,6 +56,67 @@ export default new (class ThreadServices {
       }
 
       return res.status(200).json({ code: 200, data: thread });
+    } catch (error) {
+      return res.status(500).json({ code: 500, error: error.message });
+    }
+  }
+
+  async getThreadsByUsername(req: Request, res: Response): Promise<Response> {
+    try {
+      const username: string = req.params.username;
+      const threads = await this.ThreadRepository.find({
+        where: {
+          user: {
+            username: username,
+          },
+        },
+        relations: {
+          user: true,
+          replies: true,
+          likes: true,
+        },
+      });
+      if (threads.length <= 0) {
+        return res
+          .status(404)
+          .json({ code: 404, message: "Threads not found" });
+      }
+
+      return res.status(200).json({ code: 200, data: threads });
+    } catch (error) {
+      return res.status(500).json({ code: 500, error: error.message });
+    }
+  }
+
+  async getThreadsThatUserLiked(
+    req: Request,
+    res: Response
+  ): Promise<Response> {
+    try {
+      const username: string = req.params.username;
+      const threads = await this.ThreadRepository.find({
+        where: {
+          likes: {
+            user: {
+              username: username,
+            },
+          },
+        },
+        relations: {
+          user: true,
+          replies: true,
+          likes: {
+            user: true,
+          },
+        },
+      });
+
+      if (threads.length <= 0) {
+        return res
+          .status(404)
+          .json({ code: 404, message: "Threads not found" });
+      }
+      return res.status(200).json({ code: 200, data: threads });
     } catch (error) {
       return res.status(500).json({ code: 500, error: error.message });
     }

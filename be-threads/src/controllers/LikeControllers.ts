@@ -14,4 +14,7 @@ export default new (class LikeController {
   deleteLike(req: Request, res: Response) {
     LikeServices.deleteLike(req, res);
   }
+  // getUserLikes(req: Request, res: Response) {
+  //   LikeServices.getUserLikes(req, res);
+  // }
 })();

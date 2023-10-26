@@ -4,9 +4,11 @@ import UserListAPI from "./UserListAPI";
 type ReplyAPI = {
   id: number;
   content: string;
-  image: string;
-  user: UserListAPI;
-  thread: ThreadAPI;
+  image: string | null;
+  user?: UserListAPI;
+  thread?: ThreadAPI;
+  created_at: string;
+  updated_at: string;
 };
 
 export default ReplyAPI;

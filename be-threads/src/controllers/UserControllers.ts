@@ -8,9 +8,16 @@ export default new (class UserController {
   getUserById(req: Request, res: Response) {
     UserServices.getUserById(req, res);
   }
+  getUserByUsername(req: Request, res: Response) {
+    UserServices.getUserByUsername(req, res);
+  }
   createUser(req: Request, res: Response) {
     UserServices.createUser(req, res);
   }
+  loginUser(req: Request, res: Response) {
+    UserServices.loginUser(req, res);
+  }
+
   updateUser(req: Request, res: Response) {
     UserServices.updateUser(req, res);
   }

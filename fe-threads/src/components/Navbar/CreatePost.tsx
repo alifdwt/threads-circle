@@ -18,7 +18,7 @@ function CreatePost() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Button onClick={onOpen} w={"100%"} bg="green" color="white">
+      <Button onClick={onOpen} rounded="full" colorScheme="whatsapp">
         Create Post
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>

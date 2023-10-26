@@ -81,4 +81,28 @@ export default new (class LikeServices {
       return res.status(500).json({ code: 500, error: error.message });
     }
   }
+
+  // async getUserLikes(req: Request, res: Response): Promise<Response> {
+  //   try {
+  //     const { username } = req.params;
+  //     const likes = await this.LikeRepository.find({
+  //       relations: {
+  //         user: true,
+  //         thread: true,
+  //       },
+  //       where: {
+  //         user: {
+  //           username: username,
+  //         },
+  //       },
+  //     });
+
+  //     if (likes.length <= 0) {
+  //       return res.status(404).json({ code: 404, message: "Likes not found" });
+  //     }
+  //     return res.status(201).json({ code: 201, data: likes });
+  //   } catch (error) {
+  //     return res.status(500).json({ code: 500, error: error.message });
+  //   }
+  // }
 })();
