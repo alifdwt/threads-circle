@@ -1,3 +1,4 @@
+import FollowAPI from "./FollowListAPI";
 import LikeAPI from "./LikeListAPI";
 import ThreadAPI from "./ThreadCardAPI";
 
@@ -13,6 +14,8 @@ type UserListAPI = {
   updated_at: string;
   threads?: ThreadAPI[];
   likes?: LikeAPI[];
+  followers?: FollowAPI[];
+  following?: FollowAPI[];
 };
 
 export default UserListAPI;

@@ -8,6 +8,10 @@ import { API } from "@/config/api";
 // import { useQuery } from "@tanstack/react-query";
 import ProfileId from "@/types/ProfileId";
 import { useEffect, useState } from "react";
+import threadDummy from "@/mocks/threads";
+// import useSWR from "swr";
+// import { fetcher } from "@/config/swr/fetcher";
+// import threadDummy from "@/mocks/threads";
 
 const HomeTimeline = (props: ProfileId) => {
   const { profileNum } = props;
@@ -15,7 +19,7 @@ const HomeTimeline = (props: ProfileId) => {
   //   queryKey: ["threads"],
   //   queryFn: async () => await API.get("/threads").then((res) => res.data.data),
   // });
-  const [thread, setThread] = useState([]);
+  const [thread, setThread] = useState<ThreadAPI[]>(threadDummy);
   useEffect(() => {
     const fetchData = async () => {
       const response = await API.get("/threads");
@@ -24,12 +28,24 @@ const HomeTimeline = (props: ProfileId) => {
     fetchData();
   });
 
+  // const { data, error, isLoading } = useSWR(
+  //   "http://localhost:5000/api/v1/threads",
+  //   fetcher
+  // );
+  // console.log(data);
+
   return (
     <Box border={"1px solid gray"} borderRadius={"10px"}>
       <ThreadForm profileNum={profileNum} />
       {thread.map((datum: ThreadAPI) => (
-        <ThreadContainer key={datum.id} {...datum} />
+        <ThreadContainer key={datum.id} datum={datum} />
       ))}
+      {/* {data.map((datum: ThreadAPI) => (
+        <ThreadContainer
+          key={datum.id}
+          datum={isLoading ? threadDummy[0] : datum}
+        />
+      ))} */}
     </Box>
   );
 };

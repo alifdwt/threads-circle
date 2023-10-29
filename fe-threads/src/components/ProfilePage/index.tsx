@@ -46,16 +46,16 @@ const ProfilePage = (props: profileProps) => {
           <Tab fontWeight={"semibold"}>Post ({thread.length})</Tab>
           <Tab fontWeight={"semibold"}>Likes ({likes.length})</Tab>
         </TabList>
-        <TabPanels>
+        <TabPanels border={"1px solid gray"}>
           <TabPanel>
             {thread.map((datum: ThreadAPI) => (
-              <ThreadContainer {...datum} key={datum.id} />
+              <ThreadContainer datum={datum} key={datum.id} />
             ))}
           </TabPanel>
           <TabPanel>
             {likes &&
               likes.map((datum: ThreadAPI) => (
-                <ThreadContainer {...datum} key={datum.id} />
+                <ThreadContainer datum={datum} key={datum.id} />
               ))}
           </TabPanel>
         </TabPanels>

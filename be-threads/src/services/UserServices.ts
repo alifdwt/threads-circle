@@ -16,6 +16,8 @@ export default new (class UserServices {
         relations: {
           threads: true,
           likes: true,
+          followers: true,
+          following: true,
         },
       });
 
@@ -39,6 +41,8 @@ export default new (class UserServices {
         relations: {
           threads: true,
           likes: true,
+          followers: true,
+          following: true,
         },
       });
 
@@ -62,6 +66,8 @@ export default new (class UserServices {
         relations: {
           threads: true,
           likes: true,
+          followers: true,
+          following: true,
         },
       });
 

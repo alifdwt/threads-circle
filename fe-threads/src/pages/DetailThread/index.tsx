@@ -7,16 +7,16 @@ import { useParams } from "react-router-dom";
 const DetailThread = () => {
   const { threadId } = useParams();
   return (
-    <Box bg={"black"}>
+    <Box bg={"blackAlpha.900"}>
       <Flex color={"white"} p={"20px"} gap={4}>
         <Box flex={"1"}>
           <Navbar />
         </Box>
         <Box flex={"2"}>
-          <ThreadPage threadId={threadId} />
+          <ThreadPage threadId={parseInt(threadId as string)} />
         </Box>
         <Box flex={"1"}>
-          <Sidebar profileNum={2} />
+          <Sidebar />
         </Box>
       </Flex>
     </Box>

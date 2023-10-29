@@ -73,7 +73,12 @@ export default new (class ThreadServices {
         relations: {
           user: true,
           replies: true,
-          likes: true,
+          likes: {
+            user: true,
+          },
+        },
+        order: {
+          created_at: "DESC",
         },
       });
       if (threads.length <= 0) {

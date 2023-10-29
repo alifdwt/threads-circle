@@ -1,8 +1,8 @@
-import { Box, Text, Avatar, Card, HStack, Stack, Link } from "@chakra-ui/react";
+import { Text, Card } from "@chakra-ui/react";
 import { API } from "@/config/api";
 import UserListAPI from "@/types/UserListAPI";
 import { useEffect, useState } from "react";
-import FollowButton from "./FollowButton";
+import FollowCard from "./FollowCard";
 
 // const users = await API.get("/users");
 
@@ -21,22 +21,7 @@ const SuggestedFollower = () => {
         Suggested for You
       </Text>
       {suggestion.map((datum: UserListAPI) => (
-        <Link key={datum.id} href={`/profile/${datum.username}`}>
-          <Box mt={3}>
-            <Stack>
-              <HStack justify={"space-between"}>
-                <HStack spacing={3}>
-                  <Avatar name={datum.full_name} src={datum.profile_picture} />
-                  <Stack spacing={-4}>
-                    <Text color={"white"}>{datum.full_name}</Text>
-                    <Text color={"gray"}>@{datum.username}</Text>
-                  </Stack>
-                </HStack>
-                <FollowButton />
-              </HStack>
-            </Stack>
-          </Box>
-        </Link>
+        <FollowCard key={datum.id} datum={datum} />
       ))}
     </Card>
   );

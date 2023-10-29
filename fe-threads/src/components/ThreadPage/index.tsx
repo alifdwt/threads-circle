@@ -7,24 +7,21 @@ import ThreadAPI from "@/types/ThreadCardAPI";
 import {
   Avatar,
   Box,
-  Button,
   Flex,
   HStack,
   Image,
-  Input,
   Link,
+  SkeletonCircle,
+  SkeletonText,
   Stack,
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { BiChat, BiImageAdd, BiSolidLike } from "react-icons/bi";
+import { BiChat, BiSolidLike } from "react-icons/bi";
 import { BsArrowLeftShort, BsDot } from "react-icons/bs";
+import ThreadReplyForm from "./ThreadReplyForm";
 
-type ThreadProps = {
-  threadId: string | undefined;
-};
-
-const ThreadPage = (props: ThreadProps) => {
+const ThreadPage = (props: { threadId: number }) => {
   const { threadId } = props;
   const [thread, setThread] = useState<ThreadAPI>(threadDummy[0]);
   const [reply, setReply] = useState<ReplyAPI[]>(repliesDummy);
@@ -44,11 +41,30 @@ const ThreadPage = (props: ThreadProps) => {
   });
 
   return (
+    <>
+      {thread.updated_at === "1000-01-01T00:00:00.000Z" ? (
+        <Skeleton />
+      ) : (
+        <ThreadPageCard thread={thread} reply={reply} />
+      )}
+    </>
+  );
+};
+
+const ThreadPageCard = (props: { thread: ThreadAPI; reply: ReplyAPI[] }) => {
+  const { thread, reply } = props;
+
+  // function
+
+  return (
     <Box border={"1px solid gray"} borderRadius={"10px"} p={5}>
-      <HStack color={"white"}>
-        <BsArrowLeftShort size={24} />
-      </HStack>
-      <Flex gap={3}>
+      <Link href="/home">
+        <HStack color={"white"}>
+          <BsArrowLeftShort size={24} />
+          {/* <Text fontWeight={"semibold"}>Replies</Text> */}
+        </HStack>
+      </Link>
+      <Flex gap={3} mt={4}>
         <Avatar
           name={thread.user?.full_name}
           src={thread.user?.profile_picture}
@@ -62,7 +78,11 @@ const ThreadPage = (props: ThreadProps) => {
           </Link>
           <Text>{thread.content}</Text>
           {thread.image !== "null" && (
-            <Image src={thread.image} alt={thread.content} />
+            <Image
+              src={thread.image as string}
+              alt={thread.content}
+              w={"100%"}
+            />
           )}
           <Text
             mt={3}
@@ -93,33 +113,31 @@ const ThreadPage = (props: ThreadProps) => {
             </HStack>
           </HStack>
 
-          <HStack mt={5} justify="space-between">
-            <HStack>
-              <Avatar size="sm" mr={3} />
-              <Input
-                variant="unstyled"
-                color="whiteAlpha.400"
-                placeholder="What is happening?!"
-              />
-            </HStack>
-            <HStack>
-              <Box cursor="pointer">
-                <BiImageAdd size={25} color="green" />
-              </Box>
-              <Button colorScheme="whatsapp" size="xs" px={3} rounded="full">
-                Post
-              </Button>
-            </HStack>
-          </HStack>
+          <ThreadReplyForm threadId={thread.id} />
 
           <Stack mt={8}>
             {reply[0].created_at &&
               reply.map((reply) => (
-                <ThreadContainer key={reply.id} {...reply} />
+                <ThreadContainer key={reply.id} datum={reply} />
               ))}
           </Stack>
         </Box>
       </Flex>
+    </Box>
+  );
+};
+
+const Skeleton = () => {
+  return (
+    <Box
+      padding="6"
+      boxShadow="lg"
+      bg="blackAlpha.800"
+      w={"100%"}
+      borderBottom={"1px solid gray"}
+    >
+      <SkeletonCircle size="10" />
+      <SkeletonText mt="4" noOfLines={2} spacing="4" skeletonHeight="2" />
     </Box>
   );
 };

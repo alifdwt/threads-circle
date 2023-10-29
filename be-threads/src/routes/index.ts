@@ -4,6 +4,7 @@ import UserControllers from "../controllers/UserControllers";
 import ReplyControllers from "../controllers/ReplyControllers";
 import LikeControllers from "../controllers/LikeControllers";
 import Auth from "../middlewares/Auth";
+import FollowingControllers from "../controllers/FollowingControllers";
 
 const router = express.Router();
 
@@ -45,5 +46,10 @@ router.get("/like/:likeId", LikeControllers.getLikeById);
 // router.get("/likes/username/:username", LikeControllers.getUserLikes);
 router.post("/like", LikeControllers.createLike);
 router.delete("/like/:likeId", LikeControllers.deleteLike);
+
+// Following Routes
+router.get("/follows", FollowingControllers.findFollows);
+router.get("/follow/:followId", FollowingControllers.getFollowById);
+router.post("/follow", FollowingControllers.createFollow);
 
 export default router;

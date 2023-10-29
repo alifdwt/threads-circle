@@ -11,9 +11,17 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { VscVerifiedFilled } from "react-icons/vsc";
+import ProfileModal from "./ProfileModal";
 
 const CardProfile = (props: UserListAPI) => {
-  const { full_name, username, profile_picture, profile_description } = props;
+  const {
+    full_name,
+    username,
+    profile_picture,
+    profile_description,
+    followers,
+    following,
+  } = props;
   return (
     <Card bg="whiteAlpha.200" p={4}>
       <Text color="white" fontWeight={"bold"}>
@@ -37,7 +45,7 @@ const CardProfile = (props: UserListAPI) => {
           rounded="full"
           // border={"10px solid blue"}
         >
-          <Avatar size="md" src={profile_picture} />
+          <Avatar size="md" src={profile_picture} name={full_name} />
         </Box>
       </Box>
       <Flex justify="right" mt={-6}>
@@ -85,12 +93,18 @@ const CardProfile = (props: UserListAPI) => {
         </Text>
         <HStack fontSize="sm">
           <HStack>
-            <Text color="whiteAlpha.800">291</Text>
-            <Text color="whiteAlpha.600">Following</Text>
+            <ProfileModal
+              title="following"
+              followCount={following?.length}
+              follows={following}
+            />
           </HStack>
           <HStack>
-            <Text color="whiteAlpha.800">23</Text>
-            <Text color="whiteAlpha.600">Followers</Text>
+            <ProfileModal
+              title="followers"
+              followCount={followers?.length}
+              follows={followers}
+            />
           </HStack>
         </HStack>
       </Stack>

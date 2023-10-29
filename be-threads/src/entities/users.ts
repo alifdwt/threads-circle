@@ -9,6 +9,7 @@ import {
 import { Threads } from "./threads";
 import { Replies } from "./replies";
 import { Likes } from "./likes";
+import { Following } from "./following";
 
 @Entity({ name: "users" })
 export class Users {
@@ -50,4 +51,10 @@ export class Users {
 
   @OneToMany(() => Likes, (like) => like.user)
   likes: Likes[];
+
+  @OneToMany(() => Following, (following) => following.follower)
+  following: Following[];
+
+  @OneToMany(() => Following, (following) => following.following)
+  followers: Following[];
 }
