@@ -3,6 +3,8 @@ import { Threads } from "../entities/threads";
 import { AppDataSource } from "../data-source";
 import { Request, Response } from "express";
 import createThreadsSchema from "../utils/validator/threads";
+import { uploadToCloudinary } from "../utils/cloudinary/cloudinary";
+import { deleteFile } from "../utils/fileHelper/fileHelper";
 
 export default new (class ThreadServices {
   private readonly ThreadRepository: Repository<Threads> =
@@ -129,8 +131,24 @@ export default new (class ThreadServices {
 
   async createThread(req: Request, res: Response): Promise<Response> {
     try {
-      const data = req.body;
-      // const image = req.file.filename;
+      const user = res.locals.loginSession;
+      const inputData = req.body;
+      let imageResult;
+      if (req.file && req.file.filename) {
+        const image = req.file.filename;
+        imageResult = await uploadToCloudinary(
+          image,
+          `Circle/profile/${user.user.username}/threads`,
+          image
+        );
+        deleteFile(req.file.filename);
+      }
+
+      const data = {
+        content: inputData.content,
+        image: imageResult,
+        userId: user.user.id,
+      };
 
       const { error, value } = createThreadsSchema.validate(data);
       if (error) {

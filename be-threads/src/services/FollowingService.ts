@@ -52,10 +52,11 @@ export default new (class FollowingService {
 
   async createFollow(req: Request, res: Response): Promise<Response> {
     try {
+      const user = res.locals.loginSession;
       const data = req.body;
 
       const follow = this.FollowingRepository.create({
-        follower: data.followerId,
+        follower: user.user.id,
         following: data.followingId,
       });
 

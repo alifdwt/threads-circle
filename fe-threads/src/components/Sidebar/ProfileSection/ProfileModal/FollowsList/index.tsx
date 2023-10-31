@@ -2,7 +2,7 @@ import FollowCard from "@/components/Sidebar/SuggestedFollowers/FollowCard";
 import { API } from "@/config/api";
 import followsDummy from "@/mocks/follows";
 import FollowAPI from "@/types/FollowListAPI";
-import { AbsoluteCenter, Center, Spinner } from "@chakra-ui/react";
+import { Center, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 const FollowCardModal = (props: { followId: number; type: string }) => {

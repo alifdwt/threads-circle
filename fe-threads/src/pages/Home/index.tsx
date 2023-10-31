@@ -1,62 +1,20 @@
 import HomeTimeline from "@/components/Home";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import { API } from "@/config/api";
-import userDummy from "@/mocks/user";
-import UserListAPI from "@/types/UserListAPI";
-// import ProfileOptions from "@/components/Sidebar/ProfileOptions";
-import { Flex, Box, Select } from "@chakra-ui/react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { Flex, Box } from "@chakra-ui/react";
+// import ProfileSelector from "./ProfileSelector";
 
 const Home = () => {
-  const [selectedProfile, setSelectedProfile] = useState<number>(1);
-  const [profiles, setProfiles] = useState<UserListAPI[]>(userDummy);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await API.get("/users");
-      setProfiles(response.data.data);
-    };
-    fetchData();
-  }, []);
-
-  function selectedProfileId(e: ChangeEvent<HTMLSelectElement>) {
-    const selectedId = parseInt(e.target.value);
-    setSelectedProfile(selectedId);
-    localStorage.setItem("selectedProfile", JSON.stringify(selectedId));
-    window.location.href = "/home";
-  }
-
-  useEffect(() => {
-    const storedProfile = localStorage.getItem("selectedProfile");
-    if (storedProfile) {
-      setSelectedProfile(JSON.parse(storedProfile));
-    }
-  }, []);
   return (
     <Box>
-      <Select
-        placeholder="Select profile"
-        bg="white"
-        color={"black"}
-        name="profile"
-        id="profile"
-        value={selectedProfile}
-        onChange={selectedProfileId}
-      >
-        {profiles.map((profile: UserListAPI) => (
-          <option key={profile.id} value={profile.id}>
-            {profile.full_name}
-          </option>
-        ))}
-      </Select>
+      {/* <ProfileSelector /> */}
       <Box bg={"blackAlpha.900"}>
         <Flex color="white" p={"20px"} gap={4}>
           <Box flex={"1"}>
             <Navbar />
           </Box>
           <Box flex={"2"}>
-            <HomeTimeline profileNum={selectedProfile} />
+            <HomeTimeline />
           </Box>
           <Box flex={"1"}>
             <Sidebar />

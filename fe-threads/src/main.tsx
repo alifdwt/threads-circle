@@ -9,8 +9,16 @@ import DetailThread from "./pages/DetailThread/index.tsx";
 import RegisterPage from "./pages/Register/index.tsx";
 import SkeletonPage from "./pages/Skeleton/index.tsx";
 import LandingPage from "./pages/LandingPage/index.tsx";
+import { configureStore } from "@reduxjs/toolkit";
+import RootReducer from "./store/RootReducer.ts";
+import { Provider } from "react-redux";
+import Search from "./pages/Search/index.tsx";
+import Follows from "./pages/Follows/index.tsx";
 
 const client = new QueryClient();
+const store = configureStore({
+  reducer: RootReducer,
+});
 
 const router = createBrowserRouter([
   {
@@ -41,12 +49,22 @@ const router = createBrowserRouter([
     path: "/skeleton",
     element: <SkeletonPage />,
   },
+  {
+    path: "/search",
+    element: <Search />,
+  },
+  {
+    path: "/follows",
+    element: <Follows />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <ChakraProvider>
     <QueryClientProvider client={client}>
-      <RouterProvider router={router} />
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
     </QueryClientProvider>
   </ChakraProvider>
 );

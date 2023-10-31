@@ -14,12 +14,15 @@ const Sidebar = () => {
     }
   }, []);
 
+  // Get user.id from res.locals.loginSession
+
   const [selectedProfile, setSelectedProfile] = useState<number>(1);
   const [profile, setProfile] = useState<UserListAPI>(userDummy[0]);
   useEffect(() => {
     const fetchData = async () => {
       const response = await API.get(`/user/${selectedProfile}`);
       setProfile(response.data.data);
+      // console.log(response.data.data);
     };
     fetchData();
   });

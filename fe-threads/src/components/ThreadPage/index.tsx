@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import { BiChat, BiSolidLike } from "react-icons/bi";
 import { BsArrowLeftShort, BsDot } from "react-icons/bs";
 import ThreadReplyForm from "./ThreadReplyForm";
+import { useNavigate } from "react-router-dom";
 
 const ThreadPage = (props: { threadId: number }) => {
   const { threadId } = props;
@@ -52,13 +53,15 @@ const ThreadPage = (props: { threadId: number }) => {
 };
 
 const ThreadPageCard = (props: { thread: ThreadAPI; reply: ReplyAPI[] }) => {
+  const navigate = useNavigate();
+
   const { thread, reply } = props;
 
   // function
 
   return (
     <Box border={"1px solid gray"} borderRadius={"10px"} p={5}>
-      <Link href="/home">
+      <Link onClick={() => navigate("/home")}>
         <HStack color={"white"}>
           <BsArrowLeftShort size={24} />
           {/* <Text fontWeight={"semibold"}>Replies</Text> */}
@@ -70,14 +73,17 @@ const ThreadPageCard = (props: { thread: ThreadAPI; reply: ReplyAPI[] }) => {
           src={thread.user?.profile_picture}
         />
         <Box w={"full"}>
-          <Link href={`/profile/${thread.user?.username}`}>
+          <Link
+            // href={`/profile/${thread.user?.username}`}
+            onClick={() => navigate(`/profile/${thread.user?.username}`)}
+          >
             <HStack>
               <Text fontWeight={"semibold"}>{thread.user?.full_name}</Text>
             </HStack>
             <Text color={"whiteAlpha.600"}>@{thread.user?.username}</Text>
           </Link>
           <Text>{thread.content}</Text>
-          {thread.image !== "null" && (
+          {thread.image && (
             <Image
               src={thread.image as string}
               alt={thread.content}

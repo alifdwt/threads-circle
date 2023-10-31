@@ -80,12 +80,14 @@ export default new (class ReplyServices {
 
   async createReply(req: Request, res: Response): Promise<Response> {
     try {
+      const user = res.locals.loginSession;
       const data = req.body;
+      console.log(user);
 
       const reply = this.ReplyRepository.create({
         content: data.content,
         image: data.image,
-        user: data.userId,
+        user: user.user.id,
         thread: data.threadId,
       });
 

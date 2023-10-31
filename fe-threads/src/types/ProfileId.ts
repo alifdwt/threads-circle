@@ -1,4 +1,9 @@
-type ProfileId = {
+export type ProfileId = {
   profileNum: number;
 };
-export default ProfileId;
+
+export type FormInputData = {
+  content: string;
+  image: string;
+  userId: number;
+};

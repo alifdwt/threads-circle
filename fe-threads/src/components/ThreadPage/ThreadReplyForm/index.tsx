@@ -1,29 +1,33 @@
 import { API } from "@/config/api";
 import { HStack, Avatar, Input, Box, Button } from "@chakra-ui/react";
 import { BiImageAdd } from "react-icons/bi";
-import { ChangeEvent, useState, useEffect } from "react";
+import {
+  ChangeEvent,
+  useState,
+  //  useEffect
+} from "react";
 
 type formInputData = {
   content: string;
   image: string;
-  userId: number;
+  // userId: number;
   threadId: number;
 };
 
 const ThreadReplyForm = (props: { threadId: number }) => {
   const { threadId } = props;
-  const [selectedProfile, setSelectedProfile] = useState<number>(1);
-  useEffect(() => {
-    const storedProfile = localStorage.getItem("selectedProfile");
-    if (storedProfile) {
-      setSelectedProfile(JSON.parse(storedProfile));
-    }
-  }, []);
+  // const [selectedProfile, setSelectedProfile] = useState<number>(1);
+  // useEffect(() => {
+  //   const storedProfile = localStorage.getItem("selectedProfile");
+  //   if (storedProfile) {
+  //     setSelectedProfile(JSON.parse(storedProfile));
+  //   }
+  // }, []);
 
   const [form, setForm] = useState<formInputData>({
     content: "",
     image: "",
-    userId: selectedProfile,
+    // userId: selectedProfile,
     threadId: threadId,
   });
 
@@ -37,7 +41,7 @@ const ThreadReplyForm = (props: { threadId: number }) => {
   async function handlePost() {
     await API.post("/reply", {
       ...form,
-      userId: selectedProfile,
+      // userId: selectedProfile,
       threadId: threadId,
     });
   }

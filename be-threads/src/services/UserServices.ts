@@ -5,6 +5,7 @@ import { Request, Response } from "express";
 import { createUserSchema, loginSchema } from "../utils/validator/users";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
+import { uploadToCloudinary } from "../utils/cloudinary/cloudinary";
 
 export default new (class UserServices {
   private readonly UserRepository: Repository<Users> =
@@ -82,8 +83,21 @@ export default new (class UserServices {
 
   async createUser(req: Request, res: Response): Promise<Response> {
     try {
-      const data = req.body;
-      //   const image = req.file.filename;
+      const inputData = req.body;
+      const image = req.file.filename;
+      const imageResult = await uploadToCloudinary(
+        image,
+        `Circle/profile/${inputData.username}/profile_picture`,
+        inputData.username
+      );
+      const data = {
+        username: inputData.username,
+        full_name: inputData.full_name,
+        email: inputData.email,
+        password: inputData.password,
+        profile_picture: imageResult,
+        profile_description: inputData.profile_description,
+      };
 
       const { error, value } = createUserSchema.validate(data);
       if (error) {
@@ -98,7 +112,7 @@ export default new (class UserServices {
       if (emailExists > 0) {
         return res
           .status(400)
-          .json({ code: 400, error: "User already exists" });
+          .json({ code: 400, error: "Email already exists" });
       }
 
       const usernameExist = await this.UserRepository.count({
@@ -167,7 +181,7 @@ export default new (class UserServices {
       const token = await jwt.sign({ user }, "rahasia-ilahi", {
         expiresIn: "1h",
       });
-      return res.status(200).json({ code: 200, token, user });
+      return res.status(200).json({ token, user });
     } catch (error) {
       return res.status(500).json({ code: 500, error: error.message });
     }

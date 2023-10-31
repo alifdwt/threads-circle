@@ -27,6 +27,7 @@ import { useState, useEffect } from "react";
 import { BsDot } from "react-icons/bs";
 import CardProfile from "@/components/Sidebar/ProfileSection";
 import { API } from "@/config/api";
+import { useNavigate } from "react-router-dom";
 
 const ThreadContainer = (props: { datum: ThreadAPI }) => {
   return (
@@ -35,7 +36,7 @@ const ThreadContainer = (props: { datum: ThreadAPI }) => {
         <Box
           padding="6"
           boxShadow="lg"
-          bg="blackAlpha.900"
+          bg="#141414"
           w={"100%"}
           borderBottom={"1px solid gray"}
         >
@@ -50,6 +51,8 @@ const ThreadContainer = (props: { datum: ThreadAPI }) => {
 };
 
 const ThreadCard = (props: { datum: ThreadAPI }) => {
+  const navigate = useNavigate();
+
   const { id, content, image, user, replies, updated_at, likes } = props.datum;
   const [selectedProfile, setSelectedProfile] = useState(0);
   const isLiked = likes?.find((like) => like.user?.id === selectedProfile);
@@ -72,46 +75,49 @@ const ThreadCard = (props: { datum: ThreadAPI }) => {
   }
 
   return (
-    <Link href={`/thread/${id}`} _hover={{ textDecoration: "none" }}>
-      <Flex
-        gap={3}
-        p={3}
-        borderBottom={"1px solid gray"}
-        _hover={{ bg: "whiteAlpha.100" }}
-      >
-        <Avatar
-          size={"sm"}
-          name={user?.full_name}
-          src={user?.profile_picture}
-        />
-        <Box mb={4}>
-          <HStack>
-            <Tooltip
-              label={<CardProfile {...user} />}
-              bg={"black"}
-              // openDelay={500}
+    <Flex
+      gap={3}
+      p={3}
+      borderBottom={"1px solid gray"}
+      _hover={{ bg: "whiteAlpha.100" }}
+    >
+      <Avatar size={"sm"} name={user?.full_name} src={user?.profile_picture} />
+      <Box mb={4}>
+        <HStack>
+          <Tooltip
+            label={<CardProfile {...user} />}
+            bg={"black"}
+            // openDelay={500}
+          >
+            <Link
+              // href={`/profile/${user?.username}`}
+              onClick={() => navigate(`/profile/${user?.username}`)}
+              zIndex={1}
             >
-              <Link href={`/profile/${user?.username}`}>
+              <Text
+                display={"flex"}
+                gap={1}
+                fontWeight={"semibold"}
+                color={"whiteAlpha.800"}
+              >
+                {user?.full_name}
                 <Text
+                  fontWeight={"light"}
                   display={"flex"}
-                  gap={1}
-                  fontWeight={"semibold"}
-                  color={"whiteAlpha.800"}
+                  color={"whiteAlpha.600"}
                 >
-                  {user?.full_name}
-                  <Text
-                    fontWeight={"light"}
-                    display={"flex"}
-                    color={"whiteAlpha.600"}
-                  >
-                    @{user?.username}{" "}
-                    <BsDot color={"whiteAlpha.600"} size={24} />{" "}
-                    {getDuration(updated_at)}
-                  </Text>
+                  @{user?.username} <BsDot color={"whiteAlpha.600"} size={24} />{" "}
+                  {getDuration(updated_at)}
                 </Text>
-              </Link>
-            </Tooltip>
-          </HStack>
+              </Text>
+            </Link>
+          </Tooltip>
+        </HStack>
+        <Box
+          onClick={() => navigate(`/thread/${id}`)}
+          w={"600px"}
+          cursor={"pointer"}
+        >
           <Text>{TextWithAnchor({ text: content })}</Text>
           {image !== "null" && <Image src={image as string} maxW={"350px"} />}
           <HStack spacing={6}>
@@ -165,8 +171,8 @@ const ThreadCard = (props: { datum: ThreadAPI }) => {
             </Menu> */}
           </HStack>
         </Box>
-      </Flex>
-    </Link>
+      </Box>
+    </Flex>
   );
 };
 

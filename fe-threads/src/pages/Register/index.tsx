@@ -1,11 +1,7 @@
-import { Box, Heading } from "@chakra-ui/react";
+import RegisterPage from "@/components/RegisterPage";
 
-const RegisterPage = () => {
-  return (
-    <Box>
-      <Heading>Register</Heading>
-    </Box>
-  );
+const Register = () => {
+  return <RegisterPage />;
 };
 
-export default RegisterPage;
+export default Register;

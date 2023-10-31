@@ -1,28 +1,26 @@
-import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
 
-export default new (class AuthMiddleware {
+export default new (class AuthenticationMiddlewares {
   Authentication(req: Request, res: Response, next: NextFunction): Response {
     try {
       const Authorization = req.headers.authorization;
+
       if (!Authorization || !Authorization.startsWith("Bearer ")) {
-        return res.status(401).json({ code: 401, message: "Unauthorized" });
+        return res.status(401).json({ Error: "Unauthorized (authorization)" });
       }
 
       const token = Authorization.split(" ")[1];
+
       try {
         const loginSession = jwt.verify(token, "rahasia-ilahi");
         res.locals.loginSession = loginSession;
         next();
-      } catch (error) {
-        return res.status(401).json({ code: 401, message: "Unauthorized" });
+      } catch (err) {
+        return res.status(401).json({ Error: "Unauthorized (loginSession)" });
       }
-    } catch (error) {
-      return res.status(500).json({
-        code: 500,
-        message: "Error while authenticating",
-        error: error.message,
-      });
+    } catch (err) {
+      return res.status(500).json({ Error: "Error while authenticating" });
     }
   }
 })();

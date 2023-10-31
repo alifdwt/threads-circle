@@ -3,11 +3,11 @@ import { API } from "@/config/api";
 import UserListAPI from "@/types/UserListAPI";
 import { useEffect, useState } from "react";
 import FollowCard from "./FollowCard";
-
-// const users = await API.get("/users");
+import FollowAPI from "@/types/FollowListAPI";
+import useProfileSelector from "@/pages/Home/ProfileSelector/hooks/useProfileSelector";
 
 const SuggestedFollower = () => {
-  const [suggestion, setSuggestion] = useState([]);
+  const [suggestion, setSuggestion] = useState<UserListAPI[]>([]);
   useEffect(() => {
     const fetchData = async () => {
       const response = await API.get("/users");
@@ -15,6 +15,17 @@ const SuggestedFollower = () => {
     };
     fetchData();
   });
+  // const { selectedProfile } = useProfileSelector();
+
+  // const filteredData = suggestion
+  //   .filter(
+  //     (item, index, self) =>
+  //       item.follower.id !== selectedProfile &&
+  //       item.following.id !== selectedProfile &&
+  //       self.findIndex((t) => t.following.id === item.following.id) === index
+  //   )
+  //   .map((item) => item.following);
+
   return (
     <Card bg="whiteAlpha.200" p={4}>
       <Text color={"white"} fontWeight={"bold"}>

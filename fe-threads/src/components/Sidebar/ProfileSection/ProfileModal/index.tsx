@@ -37,7 +37,7 @@ const ProfileModal = (props: {
           <ModalCloseButton color={"white"} />
           <ModalBody color={"white"} bg={"blackAlpha.800"}>
             {props.followCount === 0 ? (
-              <Text>You have no {props.title} yet!</Text>
+              <Text>There is no {props.title} yet!</Text>
             ) : (
               <>
                 {props.follows?.map((datum: FollowAPI) => (

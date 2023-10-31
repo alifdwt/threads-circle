@@ -22,6 +22,7 @@ import { useState, useEffect } from "react";
 import UserListAPI from "@/types/UserListAPI";
 import userDummy from "@/mocks/user";
 import { API } from "@/config/api";
+import { useNavigate } from "react-router-dom";
 
 const navbarList: NavbarListType[] = [
   {
@@ -55,6 +56,7 @@ const navbarList: NavbarListType[] = [
 // };
 
 const Navbar = () => {
+  const navigate = useNavigate();
   useEffect(() => {
     const storedProfile = localStorage.getItem("selectedProfile");
     if (storedProfile) {
@@ -72,22 +74,6 @@ const Navbar = () => {
     fetchData();
   });
   return (
-    // <Box position={"sticky"} top={0}>
-    //   <Heading color={"green"}>Circle</Heading>
-    //   <Flex flexDirection={"column"} gap={2} py={4}>
-    //     {navbarList.map((item) => (
-    //       <Link
-    //         key={item.id}
-    //         href={item.link}
-    //         fontSize={"lg"}
-    //         fontWeight={"semibold"}
-    //       >
-    //         <Icon as={item.icon} /> {item.name}
-    //       </Link>
-    //     ))}
-    //   </Flex>
-    //   <CreatePost />
-    // </Box>
     <Stack h={"full"} justify={"space-between"}>
       <Flex
         position={"sticky"}
@@ -105,12 +91,13 @@ const Navbar = () => {
             {navbarList.map((item) => (
               <Link
                 key={item.id}
-                href={
-                  item.link === "/profile"
-                    ? `/profile/${profile.username}`
-                    : item.link
-                }
-                // href={item.link}
+                onClick={() => {
+                  if (item.name === "Profile") {
+                    navigate(`/profile/${profile.username}`);
+                  } else {
+                    navigate(item.link);
+                  }
+                }}
                 _hover={{ textDecoration: "none", bg: "whiteAlpha.100" }}
                 borderRadius={"15px"}
                 p={3}

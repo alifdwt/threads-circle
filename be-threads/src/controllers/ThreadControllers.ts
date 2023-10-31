@@ -17,6 +17,9 @@ export default new (class ThreadController {
   createThread(req: Request, res: Response) {
     ThreadServices.createThread(req, res);
   }
+  // createThread(req: Request, res: Response) {
+  //   ThreadQueue.createThread(req, res);
+  // }
   updateThread(req: Request, res: Response) {
     ThreadServices.updateThread(req, res);
   }
