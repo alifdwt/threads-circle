@@ -1,38 +1,39 @@
 import { Text, Card } from "@chakra-ui/react";
-import { API } from "@/config/api";
-import UserListAPI from "@/types/UserListAPI";
-import { useEffect, useState } from "react";
-import FollowCard from "./FollowCard";
 import FollowAPI from "@/types/FollowListAPI";
-import useProfileSelector from "@/pages/Home/ProfileSelector/hooks/useProfileSelector";
+import SuggestedFollowerContainer from "./Container";
+import { useFollows } from "@/hooks/Follow/useFollows";
 
-const SuggestedFollower = () => {
-  const [suggestion, setSuggestion] = useState<UserListAPI[]>([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await API.get("/users");
-      setSuggestion(response.data.data);
-    };
-    fetchData();
+const SuggestedFollower = (props: { follows: FollowAPI[] | undefined }) => {
+  const { getFollows } = useFollows();
+  // const followsIds = getFollows?.map((datum) => datum.id);
+  // const filteredFollows = props.follows?.filter(
+  //   (datum) => !followsIds?.includes(datum.id)
+  // )
+  // const filteredFollowsId = followsIds?.filter(
+  //   (datum) => !props.follows?.map((datum) => datum.id).includes(datum)
+  // );
+  // console.log(filteredFollowsId);
+  const filteredFollows = getFollows?.filter(
+    (datum) => !props.follows?.map((datum) => datum.id).includes(datum.id)
+  );
+  const followingData = filteredFollows?.map((datum) => datum.following);
+  const uniqueData = followingData?.filter((item, index) => {
+    const firstIndex = followingData.findIndex(
+      (element) => element.id === item.id
+    );
+    return index === firstIndex;
   });
-  // const { selectedProfile } = useProfileSelector();
-
-  // const filteredData = suggestion
-  //   .filter(
-  //     (item, index, self) =>
-  //       item.follower.id !== selectedProfile &&
-  //       item.following.id !== selectedProfile &&
-  //       self.findIndex((t) => t.following.id === item.following.id) === index
-  //   )
-  //   .map((item) => item.following);
 
   return (
     <Card bg="whiteAlpha.200" p={4}>
       <Text color={"white"} fontWeight={"bold"}>
         Suggested for You
       </Text>
-      {suggestion.map((datum: UserListAPI) => (
-        <FollowCard key={datum.id} datum={datum} />
+      {uniqueData?.map((datum) => (
+        <SuggestedFollowerContainer
+          key={datum.id}
+          followId={datum.id !== undefined ? datum.id : 0}
+        />
       ))}
     </Card>
   );

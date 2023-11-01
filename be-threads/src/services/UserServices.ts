@@ -187,6 +187,24 @@ export default new (class UserServices {
     }
   }
 
+  async checkUser(req: Request, res: Response): Promise<Response> {
+    try {
+      const loginSession = res.locals.loginSession;
+      // console.log(loginSession)
+
+      const user = await this.UserRepository.findOne({
+        where: { id: loginSession.user.id },
+      });
+
+      return res
+        .status(200)
+        .json({ code: 200, user: user, message: "Login success" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ code: 500, message: error });
+    }
+  }
+
   async updateUser(req: Request, res: Response): Promise<Response> {
     try {
       const userId: number = parseInt(req.params.userId);

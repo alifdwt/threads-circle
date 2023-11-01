@@ -1,69 +1,39 @@
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ChakraProvider } from "@chakra-ui/react";
-import Home from "./pages/Home/index.tsx";
-import Login from "./pages/Login/index.tsx";
+// import React from "react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import DetailProfile from "./pages/DetailProfile/index.tsx";
-import DetailThread from "./pages/DetailThread/index.tsx";
-import RegisterPage from "./pages/Register/index.tsx";
-import SkeletonPage from "./pages/Skeleton/index.tsx";
-import LandingPage from "./pages/LandingPage/index.tsx";
 import { configureStore } from "@reduxjs/toolkit";
 import RootReducer from "./store/RootReducer.ts";
 import { Provider } from "react-redux";
-import Search from "./pages/Search/index.tsx";
-import Follows from "./pages/Follows/index.tsx";
+// import App from "./App.tsx";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import router from "./contants/Route.tsx";
 
 const client = new QueryClient();
 const store = configureStore({
   reducer: RootReducer,
 });
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <LandingPage />,
+const routerMain = createBrowserRouter(router);
+
+const theme = extendTheme({
+  styles: {
+    global: {
+      body: {
+        bg: "darkBackgroud",
+      },
+    },
   },
-  {
-    path: "/home",
-    element: <Home />,
+  colors: {
+    darkBackgroud: "#262626",
   },
-  {
-    path: "/auth/register",
-    element: <RegisterPage />,
-  },
-  {
-    path: "/auth/login",
-    element: <Login />,
-  },
-  {
-    path: "/profile/:username",
-    element: <DetailProfile />,
-  },
-  {
-    path: "/thread/:threadId",
-    element: <DetailThread />,
-  },
-  {
-    path: "/skeleton",
-    element: <SkeletonPage />,
-  },
-  {
-    path: "/search",
-    element: <Search />,
-  },
-  {
-    path: "/follows",
-    element: <Follows />,
-  },
-]);
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <ChakraProvider>
+  <ChakraProvider theme={theme}>
     <QueryClientProvider client={client}>
       <Provider store={store}>
-        <RouterProvider router={router} />
+        <RouterProvider router={routerMain} />
       </Provider>
     </QueryClientProvider>
   </ChakraProvider>

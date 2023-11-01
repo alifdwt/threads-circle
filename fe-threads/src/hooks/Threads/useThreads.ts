@@ -1,5 +1,5 @@
 import { API } from "@/config/api";
-import useProfileSelector from "@/pages/Home/ProfileSelector/hooks/useProfileSelector";
+import useProfileSelector from "@/hooks/SelectedProfile/useProfileSelector";
 import { FormInputData } from "@/types/ProfileId";
 import ThreadAPI from "@/types/ThreadCardAPI";
 import { useQuery } from "@tanstack/react-query";

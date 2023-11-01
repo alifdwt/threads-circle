@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import PasswordInput from "../PasswordInput";
 import { useNavigate } from "react-router-dom";
-import useRegister from "../hooks/useRegister";
+import useRegister from "../../../hooks/Register/useRegister";
 import { BiSolidImageAdd } from "react-icons/bi";
 
 const FormRegister = () => {

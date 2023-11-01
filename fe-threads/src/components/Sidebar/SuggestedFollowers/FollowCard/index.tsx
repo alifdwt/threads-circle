@@ -1,15 +1,20 @@
 import { API } from "@/config/api";
 import UserListAPI from "@/types/UserListAPI";
-import { Link, Box, Stack, HStack, Avatar, Text } from "@chakra-ui/react";
+import { Link, Flex, Stack, HStack, Avatar, Text } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const FollowCard = ({ datum }: { datum: UserListAPI }) => {
+  const navigate = useNavigate();
   const handleFollow = async () => {
     await API.post("/follow", { followingId: datum.id });
   };
 
   return (
-    <Link key={datum.id} href={`/profile/${datum.username}`}>
-      <Box mt={3}>
+    <Flex justifyContent={"space-between"}>
+      <Link
+        key={datum.id}
+        onClick={() => navigate(`/profile/${datum.username}`)}
+      >
         <Stack>
           <HStack justify={"space-between"}>
             <HStack spacing={3}>
@@ -19,21 +24,22 @@ const FollowCard = ({ datum }: { datum: UserListAPI }) => {
                 <Text color={"gray"}>@{datum.username}</Text>
               </Stack>
             </HStack>
-            <Link
-              onClick={handleFollow}
-              href="#"
-              bg={"#22c35e"}
-              color={"white"}
-              px={5}
-              py={2}
-              borderRadius={"20px"}
-            >
-              Follow
-            </Link>
           </HStack>
         </Stack>
-      </Box>
-    </Link>
+      </Link>
+      <Link
+        onClick={handleFollow}
+        href="#"
+        bg={"#22c35e"}
+        color={"white"}
+        px={5}
+        py={2}
+        borderRadius={"20px"}
+        height={"40px"}
+      >
+        Follow
+      </Link>
+    </Flex>
   );
 };
 

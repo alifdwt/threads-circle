@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 const DetailThread = () => {
   const { threadId } = useParams();
   return (
-    <Box bg={"blackAlpha.900"}>
+    <Box>
       <Flex color={"white"} p={"20px"} gap={4}>
         <Box flex={"1"}>
           <Navbar />

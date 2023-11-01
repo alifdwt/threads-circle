@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <Box>
       {/* <ProfileSelector /> */}
-      <Box bg={"blackAlpha.900"}>
+      <Box>
         <Flex color="white" p={"20px"} gap={4}>
           <Box flex={"1"}>
             <Navbar />

@@ -8,6 +8,9 @@ export default new (class FollowingController {
   getFollowById(req: Request, res: Response) {
     FollowingService.getFollowById(req, res);
   }
+  findUsersThatDoNotFollow(req: Request, res: Response) {
+    FollowingService.findUsersThatDoNotFollow(req, res);
+  }
   createFollow(req: Request, res: Response) {
     FollowingService.createFollow(req, res);
   }

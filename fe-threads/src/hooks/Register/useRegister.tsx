@@ -17,6 +17,7 @@ const useRegister = () => {
   });
   const [passwordError, setPasswordError] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
+  console.log(passwordValue);
 
   const { data: getUsers, refetch } = useQuery<UserListAPI>({
     queryKey: ["users"],

@@ -7,8 +7,7 @@ import {
   Image,
   HStack,
   Tooltip,
-  SkeletonCircle,
-  SkeletonText,
+  Spinner,
   // Menu,
   // MenuButton,
   // MenuList,
@@ -29,22 +28,34 @@ import CardProfile from "@/components/Sidebar/ProfileSection";
 import { API } from "@/config/api";
 import { useNavigate } from "react-router-dom";
 
-const ThreadContainer = (props: { datum: ThreadAPI }) => {
+const ThreadContainer = ({ threads }: { threads: ThreadAPI[] | undefined }) => {
+  if (!threads) {
+    return null;
+  }
   return (
     <>
-      {props.datum.updated_at === "1000-01-01T00:00:00.000Z" ? (
-        <Box
-          padding="6"
-          boxShadow="lg"
-          bg="#141414"
-          w={"100%"}
-          borderBottom={"1px solid gray"}
-        >
-          <SkeletonCircle size="10" />
-          <SkeletonText mt="4" noOfLines={2} spacing="4" skeletonHeight="2" />
-        </Box>
+      {threads.length > 0 ? (
+        <>
+          {threads.map((datum: ThreadAPI) => (
+            <ThreadCard key={datum.id} datum={datum} />
+          ))}
+        </>
       ) : (
-        <ThreadCard datum={props.datum} />
+        <Box
+          display="flex"
+          justifyContent="center"
+          height={"100vh"}
+          alignItems={"center"}
+          w={"100%"}
+        >
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="#22c35e"
+            size="xl"
+          />
+        </Box>
       )}
     </>
   );
@@ -85,14 +96,15 @@ const ThreadCard = (props: { datum: ThreadAPI }) => {
       <Box mb={4}>
         <HStack>
           <Tooltip
-            label={<CardProfile {...user} />}
-            bg={"black"}
-            // openDelay={500}
+            label={<CardProfile userData={user} />}
+            bg={"transparent"}
+            w={"250px"}
           >
             <Link
-              // href={`/profile/${user?.username}`}
               onClick={() => navigate(`/profile/${user?.username}`)}
               zIndex={1}
+              display={"flex"}
+              gap={2}
             >
               <Text
                 display={"flex"}
@@ -101,14 +113,14 @@ const ThreadCard = (props: { datum: ThreadAPI }) => {
                 color={"whiteAlpha.800"}
               >
                 {user?.full_name}
-                <Text
-                  fontWeight={"light"}
-                  display={"flex"}
-                  color={"whiteAlpha.600"}
-                >
-                  @{user?.username} <BsDot color={"whiteAlpha.600"} size={24} />{" "}
-                  {getDuration(updated_at)}
-                </Text>
+              </Text>
+              <Text
+                fontWeight={"light"}
+                display={"flex"}
+                color={"whiteAlpha.600"}
+              >
+                @{user?.username} <BsDot color={"whiteAlpha.600"} size={24} />{" "}
+                {getDuration(updated_at)}
               </Text>
             </Link>
           </Tooltip>
@@ -119,6 +131,7 @@ const ThreadCard = (props: { datum: ThreadAPI }) => {
           cursor={"pointer"}
         >
           <Text>{TextWithAnchor({ text: content })}</Text>
+          {/* {content} */}
           {image !== "null" && <Image src={image as string} maxW={"350px"} />}
           <HStack spacing={6}>
             {isLiked ? (
@@ -156,19 +169,6 @@ const ThreadCard = (props: { datum: ThreadAPI }) => {
                 </Text>
               </HStack>
             </Link>
-            {/* <Menu>
-              <MenuButton
-                as={IconButton}
-                icon={<BiDotsVerticalRounded />}
-                variant={"outline"}
-              >
-                Options
-              </MenuButton>
-              <MenuList>
-                <MenuItem>Edit</MenuItem>
-                <MenuItem>Delete</MenuItem>
-              </MenuList>
-            </Menu> */}
           </HStack>
         </Box>
       </Box>

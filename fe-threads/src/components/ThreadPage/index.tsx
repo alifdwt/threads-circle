@@ -6,6 +6,7 @@ import ReplyAPI from "@/types/ReplyListAPI";
 import ThreadAPI from "@/types/ThreadCardAPI";
 import {
   Avatar,
+  AvatarGroup,
   Box,
   Flex,
   HStack,
@@ -17,10 +18,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { BiChat, BiSolidLike } from "react-icons/bi";
+import { BiChat } from "react-icons/bi";
 import { BsArrowLeftShort, BsDot } from "react-icons/bs";
 import ThreadReplyForm from "./ThreadReplyForm";
 import { useNavigate } from "react-router-dom";
+import LikeAPI from "@/types/LikeListAPI";
+import ThreadLikesCard from "./ThreadResponseIcon/Likes";
+import ThreadRepliesCard from "./ThreadResponseIcon/Replies";
 
 const ThreadPage = (props: { threadId: number }) => {
   const { threadId } = props;
@@ -105,27 +109,49 @@ const ThreadPageCard = (props: { thread: ThreadAPI; reply: ReplyAPI[] }) => {
           </Text>
 
           <HStack spacing={6}>
-            <HStack cursor="pointer" color="whiteAlpha.600" mt={2}>
-              <BiSolidLike size={20} />
-              <Text fontSize="sm" color="whiteAlpha.600">
-                {thread.likes?.length}
-              </Text>
-            </HStack>
-            <HStack cursor="pointer" color="whiteAlpha.600" mt={2}>
-              <BiChat size={20} />
-              <Text fontSize="sm" color="whiteAlpha.600">
-                {thread.replies?.length}
-              </Text>
-            </HStack>
+            <ThreadLikesCard
+              likes_count={thread.likes?.length as number}
+              like_data={thread.likes as LikeAPI[]}
+            />
+            {/* <Flex
+              color="whiteAlpha.600"
+              mt={2}
+              bg={"whiteAlpha.200"}
+              p={3}
+              borderRadius={"10px"}
+              gap={3}
+            >
+              <HStack>
+                <BiChat size={20} />
+                <Text fontSize="sm" color="whiteAlpha.600">
+                  {thread.replies?.length}
+                </Text>
+              </HStack>
+              <AvatarGroup max={2} size={"xs"}>
+                {reply.map((reply) => (
+                  <Avatar
+                    key={reply.user?.id}
+                    name={reply.user?.full_name}
+                    src={reply.user?.profile_picture}
+                  />
+                ))}
+              </AvatarGroup>
+            </Flex> */}
+            <ThreadRepliesCard
+              replies_count={thread.replies?.length as number}
+              reply_data={reply}
+            />
           </HStack>
 
           <ThreadReplyForm threadId={thread.id} />
 
           <Stack mt={8}>
-            {reply[0].created_at &&
+            {/* {reply[0].created_at &&
               reply.map((reply) => (
                 <ThreadContainer key={reply.id} datum={reply} />
-              ))}
+              ))} */}
+            {/* {reply[0].created_at && <ThreadContainer threads={reply} />} */}
+            {thread.replies[0] && <ThreadContainer threads={reply} />}
           </Stack>
         </Box>
       </Flex>

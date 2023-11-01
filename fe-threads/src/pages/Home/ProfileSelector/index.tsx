@@ -1,7 +1,7 @@
 import { Select } from "@chakra-ui/react";
 import UserListAPI from "@/types/UserListAPI";
-import useRegister from "@/components/RegisterPage/hooks/useRegister";
-import useProfileSelector from "./hooks/useProfileSelector";
+import useRegister from "@/hooks/Register/useRegister";
+import useProfileSelector from "../../../hooks/SelectedProfile/useProfileSelector";
 
 const ProfileSelector = () => {
   const { getUsers } = useRegister();

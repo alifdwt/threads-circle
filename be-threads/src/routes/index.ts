@@ -39,6 +39,11 @@ router.post(
   UserControllers.createUser
 );
 router.post("/user/login", UserControllers.loginUser);
+router.get(
+  "/user/check",
+  AuthMiddlewares.Authentication,
+  UserControllers.checkUser
+);
 router.patch("/user/:userId", UserControllers.updateUser);
 router.delete("/user/:userId", UserControllers.deleteUser);
 
@@ -64,6 +69,10 @@ router.delete("/like/:likeId", LikeControllers.deleteLike);
 // Following Routes
 router.get("/follows", FollowingControllers.findFollows);
 router.get("/follow/:followId", FollowingControllers.getFollowById);
+router.get(
+  "/follows/userId/:followId",
+  FollowingControllers.findUsersThatDoNotFollow
+);
 router.post(
   "/follow",
   AuthMiddlewares.Authentication,

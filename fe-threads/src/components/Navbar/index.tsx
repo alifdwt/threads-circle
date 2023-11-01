@@ -9,6 +9,7 @@ import {
   Link,
   Stack,
   Text,
+  useColorMode,
 } from "@chakra-ui/react";
 import { BiLogOut } from "react-icons/bi";
 import {
@@ -18,11 +19,9 @@ import {
   BiUserCircle,
 } from "react-icons/bi";
 import CreatePost from "./CreatePost";
-import { useState, useEffect } from "react";
-import UserListAPI from "@/types/UserListAPI";
-import userDummy from "@/mocks/user";
-import { API } from "@/config/api";
 import { useNavigate } from "react-router-dom";
+import useProfileSelector from "@/hooks/SelectedProfile/useProfileSelector";
+import { useUser } from "@/hooks/Users/useUser";
 
 const navbarList: NavbarListType[] = [
   {
@@ -51,38 +50,19 @@ const navbarList: NavbarListType[] = [
   },
 ];
 
-// type NavbarList = {
-//   username: string | undefined;
-// };
-
 const Navbar = () => {
+  const { colorMode, toggleColorMode } = useColorMode();
   const navigate = useNavigate();
-  useEffect(() => {
-    const storedProfile = localStorage.getItem("selectedProfile");
-    if (storedProfile) {
-      setSelectedProfile(JSON.parse(storedProfile));
-    }
-  }, []);
-
-  const [selectedProfile, setSelectedProfile] = useState<number>(1);
-  const [profile, setProfile] = useState<UserListAPI>(userDummy[0]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await API.get(`/user/${selectedProfile}`);
-      setProfile(response.data.data);
-    };
-    fetchData();
-  });
+  const { selectedProfile } = useProfileSelector();
+  const { getUser } = useUser({ userId: selectedProfile });
   return (
-    <Stack h={"full"} justify={"space-between"}>
-      <Flex
-        position={"sticky"}
-        top={5}
-        flexDirection={"column"}
-        justifyContent={"space"}
-      >
+    <Stack h={"full"}>
+      <Flex position={"sticky"} top={5} flexDirection={"column"}>
         <Box>
-          <Link href="/" _hover={{ textDecoration: "none" }}>
+          <Link
+            onClick={() => navigate("/")}
+            _hover={{ textDecoration: "none" }}
+          >
             <Heading color={"green"} pl={3}>
               Circle
             </Heading>
@@ -93,7 +73,7 @@ const Navbar = () => {
                 key={item.id}
                 onClick={() => {
                   if (item.name === "Profile") {
-                    navigate(`/profile/${profile.username}`);
+                    navigate(`/profile/${getUser?.username}`);
                   } else {
                     navigate(item.link);
                   }
@@ -111,7 +91,7 @@ const Navbar = () => {
             <CreatePost />
           </Stack>
         </Box>
-        <Box>
+        <Box mt={20}>
           <Button
             fontWeight="light"
             color="white"
@@ -121,6 +101,9 @@ const Navbar = () => {
             variant="unstyled"
           >
             Logout
+          </Button>
+          <Button onClick={toggleColorMode}>
+            Toggle {colorMode === "light" ? "Dark" : "Light"}
           </Button>
         </Box>
       </Flex>

@@ -1,6 +1,6 @@
 // import { ProfileId } from "@/types/ProfileId";
-import useUser from "@/hooks/Users/useUser";
-import useThreads from "../hooks/useThread";
+import { useUser } from "@/hooks/Users/useUser";
+import useThreads from "../../../hooks/Threads/useThread";
 import {
   InputGroup,
   InputLeftElement,
@@ -11,7 +11,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { BiImageAdd, BiListPlus, BiLocationPlus } from "react-icons/bi";
-import useProfileSelector from "@/pages/Home/ProfileSelector/hooks/useProfileSelector";
+import useProfileSelector from "@/hooks/SelectedProfile/useProfileSelector";
 
 const ThreadFormNew = () => {
   const { handlePost, handleChange, handleButtonClick, fileInputRef } =

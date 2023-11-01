@@ -1,5 +1,5 @@
 import { API } from "@/config/api";
-import useProfileSelector from "@/pages/Home/ProfileSelector/hooks/useProfileSelector";
+import useProfileSelector from "@/hooks/SelectedProfile/useProfileSelector";
 import { FormInputData } from "@/types/ProfileId";
 import ThreadAPI from "@/types/ThreadCardAPI";
 import { useQuery } from "@tanstack/react-query";
@@ -13,7 +13,11 @@ const useThreads = () => {
     userId: selectedProfile,
   });
 
-  const { data: getThreads, refetch } = useQuery<ThreadAPI[]>({
+  const {
+    isLoading,
+    data: getThreads,
+    refetch,
+  } = useQuery<ThreadAPI[]>({
     queryKey: ["thread"],
     queryFn: async () => await API.get("/threads").then((res) => res.data.data),
   });
@@ -53,6 +57,7 @@ const useThreads = () => {
   };
 
   return {
+    isLoading,
     form,
     getThreads,
     handleChange,

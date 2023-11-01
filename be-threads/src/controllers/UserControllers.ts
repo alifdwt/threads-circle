@@ -17,7 +17,9 @@ export default new (class UserController {
   loginUser(req: Request, res: Response) {
     UserServices.loginUser(req, res);
   }
-
+  checkUser(req: Request, res: Response) {
+    UserServices.checkUser(req, res);
+  }
   updateUser(req: Request, res: Response) {
     UserServices.updateUser(req, res);
   }
