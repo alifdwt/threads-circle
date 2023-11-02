@@ -1,4 +1,6 @@
 import FollowCard from "@/components/Sidebar/SuggestedFollowers/FollowCard";
+import ThreadContainer from "@/features/threads/card";
+import ThreadAPI from "@/types/ThreadCardAPI";
 import UserListAPI from "@/types/UserListAPI";
 import {
   Flex,
@@ -10,11 +12,20 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 
-const SearchTabs = (props: { userData: UserListAPI[]; searchTerm: string }) => {
+const SearchTabs = (props: {
+  searchTerm: string;
+  userData: UserListAPI[];
+  threadData: ThreadAPI[];
+}) => {
   const filteredUser = props.userData.filter((user) =>
     user.username.toLowerCase().includes(props.searchTerm.toLowerCase())
   );
-  //   console.log(filteredUser);
+
+  const filteredThreads = props.threadData.filter((thread) =>
+    // thread.title.toLowerCase().includes(props.searchTerm.toLowerCase()) ||
+    thread.content.toLowerCase().includes(props.searchTerm.toLowerCase())
+  );
+  // console.log(filteredThreads);
 
   return (
     <Tabs isFitted>
@@ -38,7 +49,13 @@ const SearchTabs = (props: { userData: UserListAPI[]; searchTerm: string }) => {
           </Flex>
         </TabPanel>
         <TabPanel>
-          <Heading>Ini buat Threads</Heading>
+          <Flex flexDirection={"column"}>
+            {filteredThreads.length > 0 ? (
+              <ThreadContainer threads={filteredThreads} type="threads" />
+            ) : (
+              <Heading textAlign={"center"}>No threads found</Heading>
+            )}
+          </Flex>
         </TabPanel>
       </TabPanels>
     </Tabs>

@@ -5,9 +5,11 @@ import ReplyControllers from "../controllers/ReplyControllers";
 import LikeControllers from "../controllers/LikeControllers";
 import FollowingControllers from "../controllers/FollowingControllers";
 import AuthMiddlewares from "../middlewares/Auth";
+import FileUpload from "../middlewares/UploadFileNew";
 const upload = require("../middlewares/UploadFile");
 
 const router = express.Router();
+const UploadMiddleware = new FileUpload("image");
 
 // THREADS ROUTES
 router.get("/threads", ThreadControllers.findThreads);
@@ -22,11 +24,17 @@ router.get(
 );
 router.post(
   "/thread",
-  upload.single("image"),
+  // upload.single("image"),
+  UploadMiddleware.handleUpload.bind(UploadMiddleware),
   AuthMiddlewares.Authentication,
   ThreadControllers.createThread
 );
-router.patch("/thread/:threadId", ThreadControllers.updateThread);
+router.patch(
+  "/thread/:threadId",
+  UploadMiddleware.handleUpload.bind(UploadMiddleware),
+  AuthMiddlewares.Authentication,
+  ThreadControllers.updateThread
+);
 router.delete("/thread/:threadId", ThreadControllers.deleteThread);
 
 // USERS ROUTES

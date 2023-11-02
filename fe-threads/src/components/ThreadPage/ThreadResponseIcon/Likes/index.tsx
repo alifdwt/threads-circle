@@ -1,36 +1,42 @@
+import { API } from "@/config/api";
+import useProfileSelector from "@/hooks/SelectedProfile/useProfileSelector";
 import LikeAPI from "@/types/LikeListAPI";
-import { Flex, HStack, Text, Avatar, AvatarGroup } from "@chakra-ui/react";
+import { ButtonGroup, IconButton } from "@chakra-ui/react";
 import { BiSolidLike } from "react-icons/bi";
+import LikesModal from "../LikesModal";
 
 const ThreadLikesCard = (props: {
   likes_count: number;
   like_data: LikeAPI[];
+  threadId: number;
 }) => {
+  const { selectedProfile } = useProfileSelector();
+  const isLiked = props.like_data?.find(
+    (like) => like.user?.id === selectedProfile
+  );
+  // console.log(props.like_data);
+
+  const handleLike = async () => {
+    await API.post("/like", {
+      userId: selectedProfile,
+      threadId: props.threadId,
+    });
+  };
+  const handleDisLike = async () => {
+    await API.delete(`/like/${isLiked?.id}`);
+  };
   return (
-    <Flex
-      color="whiteAlpha.600"
-      mt={2}
-      bg={"whiteAlpha.200"}
-      p={3}
-      borderRadius={"10px"}
-      gap={3}
-    >
-      <HStack>
-        <BiSolidLike size={20} />
-        <Text fontSize="sm" color="whiteAlpha.600">
-          {props.likes_count}
-        </Text>
-      </HStack>
-      <AvatarGroup max={2} size={"xs"}>
-        {props.like_data?.map((like) => (
-          <Avatar
-            key={like.user?.id}
-            name={like.user?.full_name}
-            src={like.user?.profile_picture}
-          />
-        ))}
-      </AvatarGroup>
-    </Flex>
+    <ButtonGroup isAttached>
+      <IconButton
+        aria-label="Like"
+        icon={<BiSolidLike />}
+        color={isLiked ? "#22c35e" : "whiteAlpha.600"}
+        bg={isLiked ? "white" : "whiteAlpha.200"}
+        _hover={{ color: "#22c35e", bg: "white" }}
+        onClick={isLiked ? handleDisLike : handleLike}
+      />
+      <LikesModal likes_count={props.likes_count} like_data={props.like_data} />
+    </ButtonGroup>
   );
 };
 

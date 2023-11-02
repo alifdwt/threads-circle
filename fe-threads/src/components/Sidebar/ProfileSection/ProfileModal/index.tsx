@@ -21,7 +21,7 @@ const ProfileModal = (props: {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Link href="#" onClick={onOpen} color={"white"}>
+      <Link onClick={onOpen} color={"white"}>
         <HStack>
           <Text fontWeight={"bold"}>{props.followCount}</Text>
           <Text color={"grey"}>{props.title}</Text>

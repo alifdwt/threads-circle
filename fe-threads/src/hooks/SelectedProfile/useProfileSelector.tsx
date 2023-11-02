@@ -1,7 +1,7 @@
 import { useState, useEffect, ChangeEvent } from "react";
 
 const useProfileSelector = () => {
-  const [selectedProfile, setSelectedProfile] = useState<number>(1);
+  const [selectedProfile, setSelectedProfile] = useState<number>(0);
 
   function selectedProfileId(e: ChangeEvent<HTMLSelectElement>) {
     const selectedId = parseInt(e.target.value);

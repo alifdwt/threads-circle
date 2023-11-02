@@ -1,5 +1,5 @@
 // import { useFollow } from "@/hooks/Follow/useFollows";
-import { Center, Spinner } from "@chakra-ui/react";
+import { Box, Center, Spinner } from "@chakra-ui/react";
 import FollowCard from "../FollowCard";
 import { useEffect, useState } from "react";
 import FollowAPI from "@/types/FollowListAPI";
@@ -15,10 +15,9 @@ const SuggestedFollowerContainer = (props: { followId: number }) => {
     };
     fetchFollowData();
   });
-  //   console.log(follow);
 
   return (
-    <>
+    <Box>
       {follow.updated_at === "1000-01-01T00:00:00.000Z" ? (
         <Center>
           <Spinner
@@ -31,7 +30,7 @@ const SuggestedFollowerContainer = (props: { followId: number }) => {
       ) : (
         <FollowCard datum={follow?.following} />
       )}
-    </>
+    </Box>
   );
 };
 

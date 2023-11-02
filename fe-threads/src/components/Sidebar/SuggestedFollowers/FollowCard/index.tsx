@@ -10,7 +10,7 @@ const FollowCard = ({ datum }: { datum: UserListAPI }) => {
   };
 
   return (
-    <Flex justifyContent={"space-between"}>
+    <Flex justifyContent={"space-between"} mb={4}>
       <Link
         key={datum.id}
         onClick={() => navigate(`/profile/${datum.username}`)}

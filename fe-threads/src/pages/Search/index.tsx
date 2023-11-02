@@ -1,5 +1,5 @@
 import Navbar from "@/components/Navbar";
-import HeadingPage from "@/components/SearchPage";
+import SearchPage from "@/components/SearchPage";
 import Sidebar from "@/components/Sidebar";
 import { Box, Flex } from "@chakra-ui/react";
 
@@ -11,7 +11,7 @@ const Search = () => {
           <Navbar />
         </Box>
         <Box flex={"2"}>
-          <HeadingPage />
+          <SearchPage />
         </Box>
         <Box flex={"1"}>
           <Sidebar />

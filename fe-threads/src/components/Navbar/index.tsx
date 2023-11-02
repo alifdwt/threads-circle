@@ -18,10 +18,12 @@ import {
   BiHeart,
   BiUserCircle,
 } from "react-icons/bi";
-import CreatePost from "./CreatePost";
+import CreateThread from "./CreateThread/CreateThread";
 import { useNavigate } from "react-router-dom";
 import useProfileSelector from "@/hooks/SelectedProfile/useProfileSelector";
 import { useUser } from "@/hooks/Users/useUser";
+import { useDispatch } from "react-redux";
+import { AUTH_LOGOUT } from "@/store/RootReducer";
 
 const navbarList: NavbarListType[] = [
   {
@@ -53,8 +55,14 @@ const navbarList: NavbarListType[] = [
 const Navbar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { selectedProfile } = useProfileSelector();
   const { getUser } = useUser({ userId: selectedProfile });
+
+  const handleLogout = () => {
+    dispatch(AUTH_LOGOUT());
+    navigate("/");
+  };
   return (
     <Stack h={"full"}>
       <Flex position={"sticky"} top={5} flexDirection={"column"}>
@@ -88,7 +96,7 @@ const Navbar = () => {
                 </HStack>
               </Link>
             ))}
-            <CreatePost />
+            <CreateThread />
           </Stack>
         </Box>
         <Box mt={20}>
@@ -99,6 +107,7 @@ const Navbar = () => {
             leftIcon={<BiLogOut size={30} />}
             colorScheme="teal"
             variant="unstyled"
+            onClick={handleLogout}
           >
             Logout
           </Button>

@@ -10,7 +10,7 @@ const RegisterPage = () => {
       justifyContent={"center"}
       alignItems={"center"}
       height={"100vh"}
-      bgGradient="linear(109.6deg,  rgba(61,131,97,1) 11.2%, rgba(28,103,88,1) 91.1%)"
+      // bgGradient="linear(109.6deg,  rgba(61,131,97,1) 11.2%, rgba(28,103,88,1) 91.1%)"
     >
       <FormRegister />
       {/* <Box display={"flex"} gap={2}>

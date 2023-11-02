@@ -10,8 +10,7 @@ export default new (class ThreadQueue {
 
       const data = {
         content: req.body.content,
-        image: req.body.image,
-        // image: res.locals.filename,
+        image: res.locals.filename,
         userId: loginSession.user.id,
       };
 
@@ -31,9 +30,13 @@ export default new (class ThreadQueue {
           message: "Error while sending message queue",
         });
 
+      // console.log(payload);
       return res.status(201).json({ message: "Thread is queued!", payload });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({
+        error: error.message,
+        message: "Error in thread queue method",
+      });
     }
   }
 })();

@@ -2,19 +2,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store/type/RootState";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import {
-  Navigate,
-  Outlet,
-  Route,
-  RouterProvider,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { API, setAuthToken } from "./config/api";
 import { AUTH_CHECK, AUTH_ERROR } from "./store/RootReducer";
+import { publicRouter, privateRouter } from "./contants/Route";
 import LandingPage from "./pages/LandingPage";
-import router from "./contants/Route";
-import { ChakraProvider } from "@chakra-ui/react";
 
 const App = () => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -28,7 +20,7 @@ const App = () => {
   const authCheck = async () => {
     try {
       setAuthToken(localStorage.token);
-      const response = await API.get("/check");
+      const response = await API.get("/user/check");
       console.log("check auth app", response);
 
       dispatch(AUTH_CHECK(response.data.user));
@@ -37,7 +29,7 @@ const App = () => {
       dispatch(AUTH_ERROR());
       console.log("auth check error", err);
       setIsLoading(false);
-      navigate("/login");
+      navigate("/auth/login");
     }
   };
 
@@ -51,7 +43,7 @@ const App = () => {
 
   const IsNotLogin = () => {
     if (!localStorage.token) {
-      return <Navigate to="/login" />;
+      return <Navigate to="/auth/login" />;
     } else {
       return <Outlet />;
     }
@@ -59,7 +51,7 @@ const App = () => {
 
   const IsLogin = () => {
     if (localStorage.token) {
-      return <Navigate to="/" />;
+      return <Navigate to="/home" />;
     } else {
       return <Outlet />;
     }
@@ -68,13 +60,9 @@ const App = () => {
   return (
     <>
       {isLoading ? null : (
-        // <ChakraProvider>
         <Routes>
           <Route path="/" element={<IsNotLogin />}>
-            <Route path="/" element={<LandingPage />} />
-          </Route>
-          <Route path="/" element={<IsLogin />}>
-            {router.map((route) => {
+            {privateRouter.map((route) => {
               return (
                 <Route
                   key={route.path}
@@ -84,8 +72,19 @@ const App = () => {
               );
             })}
           </Route>
+          <Route path="/" element={<IsLogin />}>
+            {publicRouter.map((route) => {
+              return (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={route.element}
+                />
+              );
+            })}
+          </Route>
+          <Route index element={<LandingPage />} />
         </Routes>
-        // </ChakraProvider>
       )}
     </>
   );

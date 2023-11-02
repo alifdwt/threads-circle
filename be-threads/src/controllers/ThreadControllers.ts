@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import ThreadServices from "../services/ThreadServices";
+// import ThreadQueue from "../queue/ThreadQueue";
 
 export default new (class ThreadController {
   findThreads(req: Request, res: Response) {

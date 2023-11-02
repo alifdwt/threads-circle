@@ -9,22 +9,10 @@ import Search from "@/pages/Search";
 import SkeletonPage from "@/pages/Skeleton";
 // import { createBrowserRouter } from "react-router-dom";
 
-const router = [
-  {
-    path: "/",
-    element: <LandingPage />,
-  },
+export const privateRouter = [
   {
     path: "/home",
     element: <Home />,
-  },
-  {
-    path: "/auth/register",
-    element: <RegisterPage />,
-  },
-  {
-    path: "/auth/login",
-    element: <Login />,
   },
   {
     path: "/profile/:username",
@@ -48,4 +36,17 @@ const router = [
   },
 ];
 
-export default router;
+export const publicRouter = [
+  {
+    path: "/",
+    element: <LandingPage />,
+  },
+  {
+    path: "/auth/register",
+    element: <RegisterPage />,
+  },
+  {
+    path: "/auth/login",
+    element: <Login />,
+  },
+];

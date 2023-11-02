@@ -20,6 +20,7 @@ const useThreads = () => {
   } = useQuery<ThreadAPI[]>({
     queryKey: ["thread"],
     queryFn: async () => await API.get("/threads").then((res) => res.data.data),
+    refetchInterval: 100,
   });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

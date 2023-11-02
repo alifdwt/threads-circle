@@ -46,10 +46,10 @@ const ProfilePage = (props: profileProps) => {
         </TabList>
         <TabPanels border={"1px solid gray"}>
           <TabPanel p={0}>
-            <ThreadContainer threads={profileThread} />
+            <ThreadContainer threads={profileThread} type="threads" />
           </TabPanel>
           <TabPanel>
-            <ThreadContainer threads={likes} />
+            <ThreadContainer threads={likes} type="threads" />
           </TabPanel>
         </TabPanels>
       </Tabs>

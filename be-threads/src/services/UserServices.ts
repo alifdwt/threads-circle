@@ -81,6 +81,21 @@ export default new (class UserServices {
     }
   }
 
+  // async getUsersThatUserNotFollowing(req: Request, res: Response): Promise<Response> {
+  //   try {
+  //     const userId = res.locals.loginSession.user.id;
+  //     const users = await this.UserRepository.find({
+  //       relations: {
+  //         following: {
+
+  //         }
+  //       }
+  //     })
+  //   } catch (error) {
+
+  //   }
+  // })
+
   async createUser(req: Request, res: Response): Promise<Response> {
     try {
       const inputData = req.body;
@@ -183,7 +198,11 @@ export default new (class UserServices {
       });
       return res.status(200).json({ token, user });
     } catch (error) {
-      return res.status(500).json({ code: 500, error: error.message });
+      return res.status(500).json({
+        code: 500,
+        error: error.message,
+        message: "errornya di login",
+      });
     }
   }
 

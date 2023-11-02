@@ -1,40 +1,65 @@
-import { Text, Card } from "@chakra-ui/react";
+import { Text, Card, Spinner } from "@chakra-ui/react";
 import FollowAPI from "@/types/FollowListAPI";
 import SuggestedFollowerContainer from "./Container";
+import { useEffect, useState } from "react";
 import { useFollows } from "@/hooks/Follow/useFollows";
+import useProfileSelector from "@/hooks/SelectedProfile/useProfileSelector";
+import { API } from "@/config/api";
+import SuggestedUserContainer from "./UserCard";
 
-const SuggestedFollower = (props: { follows: FollowAPI[] | undefined }) => {
+const SuggestedFollower = () => {
   const { getFollows } = useFollows();
-  // const followsIds = getFollows?.map((datum) => datum.id);
-  // const filteredFollows = props.follows?.filter(
-  //   (datum) => !followsIds?.includes(datum.id)
-  // )
-  // const filteredFollowsId = followsIds?.filter(
-  //   (datum) => !props.follows?.map((datum) => datum.id).includes(datum)
-  // );
-  // console.log(filteredFollowsId);
-  const filteredFollows = getFollows?.filter(
-    (datum) => !props.follows?.map((datum) => datum.id).includes(datum.id)
-  );
-  const followingData = filteredFollows?.map((datum) => datum.following);
-  const uniqueData = followingData?.filter((item, index) => {
-    const firstIndex = followingData.findIndex(
-      (element) => element.id === item.id
-    );
-    return index === firstIndex;
+  const [users, setUsers] = useState([]);
+  const { selectedProfile } = useProfileSelector();
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await API.get("/users");
+      setUsers(response.data.data);
+    };
+    fetchData();
   });
+
+  const followedIds = [];
+  const notFollowedIds = [];
+
+  for (let i = 0; i < getFollows?.length; i++) {
+    const followerId = getFollows[i].follower.id;
+    const followingId = getFollows[i].following.id;
+    if (followerId === selectedProfile) {
+      followedIds.push(followingId);
+    }
+  }
+
+  const allIds = users.map((user) => user.id).sort();
+
+  for (let i = 0; i < allIds.length; i++) {
+    const currentId = allIds[i];
+    if (!followedIds.includes(currentId) && currentId !== selectedProfile) {
+      notFollowedIds.push(currentId);
+    }
+  }
+  // console.log(notFollowedIds);
 
   return (
     <Card bg="whiteAlpha.200" p={4}>
-      <Text color={"white"} fontWeight={"bold"}>
+      <Text color={"white"} fontWeight={"bold"} mb={2}>
         Suggested for You
       </Text>
-      {uniqueData?.map((datum) => (
-        <SuggestedFollowerContainer
-          key={datum.id}
-          followId={datum.id !== undefined ? datum.id : 0}
-        />
-      ))}
+      {/* {notFollowedIds?.map((datum) => (
+        <SuggestedFollowerContainer key={datum} followId={datum} />
+      ))} */}
+      {selectedProfile === 0 ? (
+        <Spinner />
+      ) : (
+        <>
+          {notFollowedIds?.map((datum) => (
+            <SuggestedUserContainer key={datum} userId={datum} />
+          ))}
+        </>
+      )}
+      {/* {notFollowedIds?.map((datum) => (
+        <SuggestedUserContainer key={datum} userId={datum} />
+      ))} */}
     </Card>
   );
 };

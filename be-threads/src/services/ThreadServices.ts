@@ -2,7 +2,10 @@ import { Repository } from "typeorm";
 import { Threads } from "../entities/threads";
 import { AppDataSource } from "../data-source";
 import { Request, Response } from "express";
-import createThreadsSchema from "../utils/validator/threads";
+import {
+  createThreadsSchema,
+  updateThreadsSchema,
+} from "../utils/validator/threads";
 import { uploadToCloudinary } from "../utils/cloudinary/cloudinary";
 import { deleteFile } from "../utils/fileHelper/fileHelper";
 
@@ -172,33 +175,67 @@ export default new (class ThreadServices {
   async updateThread(req: Request, res: Response): Promise<Response> {
     try {
       const threadId: number = parseInt(req.params.threadId);
+      const user = res.locals.loginSession;
 
       const updateThread = req.body;
       if (!updateThread) {
         return res.status(404).json({ code: 404, error: "Thread not found" });
       }
-      //   const { error } = threadsSchema.validate(updateThread);
-      //   if (error) {
-      //     return res.status(400).json({ code: 400, error: error.message });
-      //   }
+
+      let imageResult;
+      if (req.file && req.file.filename) {
+        const image = req.file.filename;
+        imageResult = await uploadToCloudinary(
+          image,
+          `Circle/profile/${user.user.username}/threads`,
+          image
+        );
+        deleteFile(req.file.filename);
+      }
+
+      const data = {
+        content: updateThread.content,
+        image: imageResult,
+        userId: user.user.id,
+      };
+
+      const { value, error } = updateThreadsSchema.validate(data);
+      if (error) {
+        return res.status(400).json({ code: 400, error: error.message });
+      }
 
       const thread = await this.ThreadRepository.findOne({
         relations: {
           user: true,
+          replies: true,
+          likes: {
+            user: true,
+          },
         },
         where: {
           id: threadId,
         },
       });
 
-      if (updateThread.content == "") {
-        updateThread.content = thread[0].content;
+      if (value.content == "") {
+        value.content = thread[0].content;
       }
-      if (updateThread.image == "") {
-        updateThread.image = thread[0].image;
+      if (value.image == "") {
+        value.image = thread[0].image;
       }
 
-      const update = await this.ThreadRepository.update(thread, updateThread);
+      console.log(value);
+
+      // const update = await this.ThreadRepository.update(thread, value);
+      const update = await this.ThreadRepository.createQueryBuilder()
+        .update(Threads)
+        .set({
+          content: value.content,
+          image: value.image,
+          user: value.userId,
+        })
+        .where("id = :id", { id: threadId })
+        .execute();
       res.status(200).json({ code: 200, data: update });
     } catch (error) {
       return res.status(500).json({ code: 500, error: error.message });

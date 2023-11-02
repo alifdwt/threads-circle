@@ -6,4 +6,10 @@ const createThreadsSchema = Joi.object({
   userId: Joi.number().required(),
 });
 
-export default createThreadsSchema;
+const updateThreadsSchema = Joi.object({
+  content: Joi.string(),
+  image: Joi.string(),
+  userId: Joi.number().required(),
+});
+
+export { createThreadsSchema, updateThreadsSchema };

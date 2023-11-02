@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useUser = (props: { userId: number }) => {
   const { isLoading, data: getUser } = useQuery<UserListAPI>({
-    queryKey: ["users"],
+    queryKey: ["user"],
     refetchInterval: 100,
     queryFn: async () =>
       await API.get(`/user/${props.userId}`).then((res) => res.data.data),
@@ -14,7 +14,7 @@ export const useUser = (props: { userId: number }) => {
 };
 
 export const useUsers = () => {
-  const { isLoading, data: getUsers } = useQuery<UserListAPI>({
+  const { isLoading, data: getUsers } = useQuery<UserListAPI[]>({
     queryKey: ["users"],
     refetchInterval: 100,
     queryFn: async () => await API.get("/users").then((res) => res.data.data),
