@@ -24,7 +24,6 @@ router.get(
 );
 router.post(
   "/thread",
-  // upload.single("image"),
   UploadMiddleware.handleUpload.bind(UploadMiddleware),
   AuthMiddlewares.Authentication,
   ThreadControllers.createThread
@@ -61,10 +60,16 @@ router.get("/reply/:replyId", ReplyControllers.getReplyById);
 router.get("/replies/thread/:threadId", ReplyControllers.getRepliesByThreadId);
 router.post(
   "/reply",
+  UploadMiddleware.handleUpload.bind(UploadMiddleware),
   AuthMiddlewares.Authentication,
   ReplyControllers.createReply
 );
-router.patch("/reply/:replyId", ReplyControllers.updateReply);
+router.patch(
+  "/reply/:replyId",
+  UploadMiddleware.handleUpload.bind(UploadMiddleware),
+  AuthMiddlewares.Authentication,
+  ReplyControllers.updateReply
+);
 router.delete("/reply/:replyId", ReplyControllers.deleteReply);
 
 // LIKE ROUTES
@@ -85,6 +90,11 @@ router.post(
   "/follow",
   AuthMiddlewares.Authentication,
   FollowingControllers.createFollow
+);
+router.delete(
+  "/follow/:followId",
+  AuthMiddlewares.Authentication,
+  FollowingControllers.deleteFollow
 );
 
 export default router;

@@ -1,13 +1,10 @@
-import { API } from "@/config/api";
 import UserListAPI from "@/types/UserListAPI";
 import { Link, Flex, Stack, HStack, Avatar, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import FollowButton from "./FollowButton";
 
 const FollowCard = ({ datum }: { datum: UserListAPI }) => {
   const navigate = useNavigate();
-  const handleFollow = async () => {
-    await API.post("/follow", { followingId: datum.id });
-  };
 
   return (
     <Flex justifyContent={"space-between"} mb={4}>
@@ -27,18 +24,7 @@ const FollowCard = ({ datum }: { datum: UserListAPI }) => {
           </HStack>
         </Stack>
       </Link>
-      <Link
-        onClick={handleFollow}
-        href="#"
-        bg={"#22c35e"}
-        color={"white"}
-        px={5}
-        py={2}
-        borderRadius={"20px"}
-        height={"40px"}
-      >
-        Follow
-      </Link>
+      <FollowButton followingId={datum.id as number} />
     </Flex>
   );
 };

@@ -32,7 +32,7 @@ const DeleteModal = (props: { threadId: number; type: string }) => {
         _hover={{ bg: "red" }}
         onClick={onOpen}
       >
-        Delete Thread
+        Delete {props.type}
       </MenuItem>
 
       <Modal isOpen={isOpen} onClose={onClose}>

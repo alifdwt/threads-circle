@@ -105,4 +105,31 @@ export default new (class FollowingService {
       return res.status(500).json({ code: 500, error: error.message });
     }
   }
+
+  async deleteFollow(req: Request, res: Response): Promise<Response> {
+    try {
+      const user = res.locals.loginSession;
+      const followId: number = parseInt(req.params.followId);
+      const followToDelete = await this.FollowingRepository.findOne({
+        where: {
+          follower: {
+            id: user.user.id,
+          },
+          following: {
+            id: followId,
+          },
+        },
+      });
+      if (!followToDelete) {
+        return res.status(404).json({ code: 404, error: "Follow not found" });
+      }
+
+      const deleteFollow = await this.FollowingRepository.remove(
+        followToDelete
+      );
+      return res.status(201).json({ code: 201, data: deleteFollow });
+    } catch (error) {
+      return res.status(500).json({ code: 500, error: error.message });
+    }
+  }
 })();

@@ -1,33 +1,29 @@
 import UserListAPI from "@/types/UserListAPI";
 import {
   Box,
-  Button,
   Card,
   Flex,
   HStack,
   Link,
+  Spinner,
   Stack,
   Text,
 } from "@chakra-ui/react";
 import { VscVerifiedFilled } from "react-icons/vsc";
 import ProfileModal from "./ProfileModal";
 import ProfilePicture from "./ProfilePicture";
+import EditProfile from "./EditProfile";
+import useProfileSelector from "@/hooks/SelectedProfile/useProfileSelector";
+import FollowButton from "../SuggestedFollowers/FollowCard/FollowButton";
 
 const CardProfile = ({ userData }: { userData: UserListAPI | undefined }) => {
-  // const {
-  //   full_name,
-  //   username,
-  //   profile_picture,
-  //   profile_description,
-  //   followers,
-  //   following,
-  // } = props.userData;
+  const { selectedProfile } = useProfileSelector();
   return (
     <Card bg="whiteAlpha.200" p={4}>
       <Text color="white" fontWeight={"bold"}>
         Profile
       </Text>
-      {userData ? (
+      {userData.id !== 0 ? (
         <>
           <Box pos="relative" h="70px" mt={3} rounded="xl" bg="mediumseagreen">
             <Box
@@ -44,19 +40,15 @@ const CardProfile = ({ userData }: { userData: UserListAPI | undefined }) => {
               />
             </Box>
           </Box>
-          <Flex justify="right" mt={-6}>
-            <Button
-              color="white"
-              size="xs"
-              rounded="full"
-              variant="outline"
-              mt={8}
-              w="fit-content"
-              _hover={{ bg: "gray" }}
-            >
-              Edit Profile
-            </Button>
-          </Flex>
+          {selectedProfile === userData.id ? (
+            <Flex justify="right" mt={-6}>
+              <EditProfile user={userData} />
+            </Flex>
+          ) : (
+            <Flex justify="right" mt={2}>
+              <FollowButton followingId={userData.id as number} />
+            </Flex>
+          )}
 
           <Stack spacing={0}>
             <Link href={`/profile/${userData.username}`}>
@@ -106,9 +98,15 @@ const CardProfile = ({ userData }: { userData: UserListAPI | undefined }) => {
           </Stack>
         </>
       ) : (
-        <>
-          <Text>Loading...</Text>
-        </>
+        <Flex justify="center" mt={5}>
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="#22c35e"
+            size="xl"
+          />
+        </Flex>
       )}
     </Card>
   );

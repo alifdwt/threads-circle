@@ -6,6 +6,7 @@ import { createUserSchema, loginSchema } from "../utils/validator/users";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import { uploadToCloudinary } from "../utils/cloudinary/cloudinary";
+import { deleteFile } from "../utils/fileHelper/fileHelper";
 
 export default new (class UserServices {
   private readonly UserRepository: Repository<Users> =
@@ -81,30 +82,19 @@ export default new (class UserServices {
     }
   }
 
-  // async getUsersThatUserNotFollowing(req: Request, res: Response): Promise<Response> {
-  //   try {
-  //     const userId = res.locals.loginSession.user.id;
-  //     const users = await this.UserRepository.find({
-  //       relations: {
-  //         following: {
-
-  //         }
-  //       }
-  //     })
-  //   } catch (error) {
-
-  //   }
-  // })
-
   async createUser(req: Request, res: Response): Promise<Response> {
     try {
       const inputData = req.body;
-      const image = req.file.filename;
-      const imageResult = await uploadToCloudinary(
-        image,
-        `Circle/profile/${inputData.username}/profile_picture`,
-        inputData.username
-      );
+      let imageResult;
+      if (req.file && req.file.filename) {
+        const image = req.file.filename;
+        imageResult = await uploadToCloudinary(
+          image,
+          `Circle/profile/${inputData.username}/profile_picture`,
+          inputData.username
+        );
+        deleteFile(req.file.filename);
+      }
       const data = {
         username: inputData.username,
         full_name: inputData.full_name,

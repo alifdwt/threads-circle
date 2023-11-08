@@ -5,19 +5,20 @@ import {
   Link,
   Text,
   HStack,
-  Tooltip,
   Spinner,
+  Image,
+  LinkBox,
+  LinkOverlay,
+  Button,
 } from "@chakra-ui/react";
 import { BiSolidLike, BiChat, BiShare } from "react-icons/bi";
 import ThreadAPI from "@/types/ThreadCardAPI";
 import { useState, useEffect } from "react";
 import { BsDot } from "react-icons/bs";
-import CardProfile from "@/components/Sidebar/ProfileSection";
 import { API } from "@/config/api";
 import { useNavigate } from "react-router-dom";
 import OptionsCard from "./OptionsCard";
 import { AiOutlineEdit } from "react-icons/ai";
-import ImageModal from "./ImageModal";
 
 const ThreadContainer = (props: {
   threads: ThreadAPI[] | undefined;
@@ -82,8 +83,8 @@ const ThreadCard = (props: { datum: ThreadAPI; type: string }) => {
   }
 
   return (
-    <Flex
-      // gap={3}
+    <LinkBox
+      as={Flex}
       p={3}
       borderBottom={"1px solid gray"}
       _hover={{ bg: "whiteAlpha.100" }}
@@ -97,84 +98,78 @@ const ThreadCard = (props: { datum: ThreadAPI; type: string }) => {
           m={2}
         />
         <Box>
-          <HStack>
-            <Tooltip
-              label={<CardProfile userData={user} />}
-              bg={"#373737"}
-              w={"250px"}
-            >
-              <Link
-                onClick={() => navigate(`/profile/${user?.username}`)}
-                display={"flex"}
-                gap={2}
-              >
-                <Text
-                  display={"flex"}
-                  gap={1}
-                  fontWeight={"semibold"}
-                  color={"whiteAlpha.800"}
-                >
-                  {user?.full_name}
-                </Text>
-                <Text
-                  fontWeight={"light"}
-                  display={"flex"}
-                  color={"whiteAlpha.600"}
-                >
-                  @{user?.username}
-                  {created_at !== updated_at && <AiOutlineEdit />}
-                  <BsDot color={"whiteAlpha.600"} size={24} />
-                  {getDuration(updated_at)}
-                </Text>
-              </Link>
-            </Tooltip>
-          </HStack>
-          <Box
+          <LinkOverlay
             onClick={() => navigate(`/thread/${id}`)}
             w={"600px"}
             cursor={"pointer"}
+            color={"transparent"}
+          ></LinkOverlay>
+          <Button
+            onClick={() => navigate(`/profile/${user?.username}`)}
+            display={"flex"}
+            gap={2}
+            variant={"link"}
           >
+            <Text
+              display={"flex"}
+              gap={1}
+              fontWeight={"semibold"}
+              color={"whiteAlpha.800"}
+            >
+              {user?.full_name}
+            </Text>
+            <Text
+              fontWeight={"light"}
+              display={"flex"}
+              color={"whiteAlpha.600"}
+            >
+              @{user?.username}
+              {created_at !== updated_at && <AiOutlineEdit />}
+              <BsDot color={"whiteAlpha.600"} size={24} />
+              {getDuration(updated_at)}
+            </Text>
+          </Button>
+          <Text w={"600px"}>
             <Text>{TextWithAnchor({ text: content })}</Text>
-            {/* {image !== "null" && <ImageModal thread={props.datum} />} */}
-          </Box>
-          {image !== "null" && <ImageModal thread={props.datum} />}
+            {image !== "null" && <Image src={image as string} maxW={"60%"} />}
+          </Text>
           {props.type === "threads" && (
             <HStack spacing={6}>
               {isLiked ? (
-                <Link onClick={handleDislike}>
+                <Button onClick={handleDislike} variant={"link"}>
                   <HStack color="whiteAlpha.600" mt={2}>
                     <BiSolidLike size={20} color={isLiked ? "#22c35e" : ""} />
                     <Text fontSize="sm" color="whiteAlpha.600">
                       {likes?.length}
                     </Text>
                   </HStack>
-                </Link>
+                </Button>
               ) : (
-                <Link onClick={handleLike}>
+                <Button onClick={handleLike} variant={"link"}>
                   <HStack color="whiteAlpha.600" mt={2}>
                     <BiSolidLike size={20} color={isLiked ? "#22c35e" : ""} />
                     <Text fontSize="sm" color="whiteAlpha.600">
                       {likes?.length}
                     </Text>
                   </HStack>
-                </Link>
+                </Button>
               )}
-              <Link>
+              <Button variant={"link"}>
                 <HStack color="whiteAlpha.600" mt={2}>
                   <BiChat size={20} />
                   <Text fontSize="sm" color="whiteAlpha.600">
                     {replies?.length}
                   </Text>
                 </HStack>
-              </Link>
-              <Link>
+              </Button>
+              <Button variant={"link"}>
                 <HStack color="whiteAlpha.600" mt={2}>
                   <BiShare size={20} />
                   <Text fontSize="sm" color="whiteAlpha.600">
                     Share
                   </Text>
                 </HStack>
-              </Link>
+              </Button>
             </HStack>
           )}
         </Box>
@@ -184,7 +179,7 @@ const ThreadCard = (props: { datum: ThreadAPI; type: string }) => {
         thread={props.datum}
         type={props.type}
       />
-    </Flex>
+    </LinkBox>
   );
 };
 

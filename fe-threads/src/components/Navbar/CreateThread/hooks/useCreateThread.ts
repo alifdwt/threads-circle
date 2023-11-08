@@ -5,7 +5,7 @@ import { useState, ChangeEvent } from "react";
 import useToast from "@/hooks/Toast/useToast";
 import { API } from "@/config/api";
 
-const useCreateThread = () => {
+const useCreateThread = (props: { identity: number; type: string }) => {
   const queryClient = useQueryClient();
   // const { user, accessToken } = useSelector((state: RootState) => state.user);
   const [thread, setThread] = useState("");
@@ -14,10 +14,10 @@ const useCreateThread = () => {
   const form = new FormData();
 
   const mutation = useMutation({
-    mutationFn: (newThread: any) => API.post("/thread", newThread),
+    mutationFn: (newThread: any) => API.post(`/${props.type}`, newThread),
 
     onSuccess: () => {
-      toast("Success", "Thread created", "success");
+      toast("Success", `${props.type} created`, "success");
       queryClient.invalidateQueries({ queryKey: ["thread"] });
     },
     onError: (error: any) =>
@@ -31,6 +31,10 @@ const useCreateThread = () => {
   const handlePost = () => {
     form.append("content", thread);
     form.append("image", image as File);
+    {
+      props.type === "reply" &&
+        form.append("threadId", props.identity.toString());
+    }
     mutation.mutate(form);
 
     setThread("");

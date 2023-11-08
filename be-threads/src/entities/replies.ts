@@ -14,7 +14,7 @@ export class Replies {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
+  @Column()
   content: string;
 
   @Column({ nullable: true })

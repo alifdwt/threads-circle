@@ -23,10 +23,6 @@ export const privateRouter = [
     element: <DetailThread />,
   },
   {
-    path: "/skeleton",
-    element: <SkeletonPage />,
-  },
-  {
     path: "/search",
     element: <Search />,
   },
@@ -48,5 +44,9 @@ export const publicRouter = [
   {
     path: "/auth/login",
     element: <Login />,
+  },
+  {
+    path: "/skeleton",
+    element: <SkeletonPage />,
   },
 ];

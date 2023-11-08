@@ -21,11 +21,12 @@ const useEdit = (props: { identity: number; type: string }) => {
     mutationFn: (editedThread: any) =>
       API.patch(`/${typeSingular}/${props.identity}`, editedThread),
     onSuccess: () => {
-      toast("Success", "Thread edited", "success");
-      queryClient.invalidateQueries({ queryKey: ["thread"] });
+      toast("Success", `${typeSingular} edited`, "success");
+      queryClient.invalidateQueries({ queryKey: [`${typeSingular}`] });
     },
     onError: (error: any) => {
-      toast("Error", error.response.data.message, "error");
+      console.log(error);
+      toast("Error", error.response.data.error, "error");
     },
   });
 
@@ -58,6 +59,7 @@ const useEdit = (props: { identity: number; type: string }) => {
     input.onchange = handleFileChange;
     input.click();
   };
+  // console.log(content);
 
   return {
     content,

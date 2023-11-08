@@ -14,7 +14,7 @@ const ProfilePicture = (props: { profile_src: string; username: string }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Link href="#" onClick={onOpen}>
+      <Link onClick={onOpen}>
         <Avatar name={props.username} src={props.profile_src} size={"md"} />
       </Link>
 

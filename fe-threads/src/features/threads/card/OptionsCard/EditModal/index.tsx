@@ -44,7 +44,7 @@ const EditModal = (props: { thread: ThreadAPI; type: string }) => {
         _hover={{ bg: "#22c35e" }}
         onClick={onOpen}
       >
-        Edit Thread
+        Edit {props.type}
       </MenuItem>
 
       <Modal isOpen={isOpen} onClose={onClose}>

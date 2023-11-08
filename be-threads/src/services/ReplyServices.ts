@@ -2,6 +2,8 @@ import { Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { Replies } from "../entities/replies";
 import { Request, Response } from "express";
+import { uploadToCloudinary } from "../utils/cloudinary/cloudinary";
+import { deleteFile } from "../utils/fileHelper/fileHelper";
 
 export default new (class ReplyServices {
   private readonly ReplyRepository: Repository<Replies> =
@@ -81,14 +83,23 @@ export default new (class ReplyServices {
   async createReply(req: Request, res: Response): Promise<Response> {
     try {
       const user = res.locals.loginSession;
-      const data = req.body;
-      console.log(user);
+      const inputData = req.body;
+      let imageResult;
+      if (req.file && req.file.filename) {
+        const image = req.file.filename;
+        imageResult = await uploadToCloudinary(
+          image,
+          `Circle/profile/${user.user.username}/replies`,
+          image
+        );
+        deleteFile(req.file.filename);
+      }
 
       const reply = this.ReplyRepository.create({
-        content: data.content,
-        image: data.image,
+        content: inputData.content,
+        image: imageResult,
         user: user.user.id,
-        thread: data.threadId,
+        thread: inputData.threadId,
       });
 
       const createReply = await this.ReplyRepository.save(reply);
@@ -101,7 +112,9 @@ export default new (class ReplyServices {
   async updateReply(req: Request, res: Response): Promise<Response> {
     try {
       const replyId: number = parseInt(req.params.replyId);
+      const userId = res.locals.loginSession.user.id;
       const replyToUpdate = req.body;
+      console.log(replyToUpdate);
       if (!replyToUpdate) {
         return res.status(404).json({ code: 404, error: "Reply not found" });
       }
@@ -109,16 +122,28 @@ export default new (class ReplyServices {
         where: {
           id: replyId,
         },
+        relations: {
+          thread: true,
+        },
       });
 
       if (replyToUpdate.content == "") {
-        replyToUpdate.content = reply[0].content;
+        replyToUpdate.content = reply.content;
       }
       if (replyToUpdate.image == "") {
-        replyToUpdate.image = reply[0].image;
+        replyToUpdate.image = reply.image;
       }
+      replyToUpdate.thread = reply.thread.id;
 
-      const update = await this.ReplyRepository.update(reply, replyToUpdate);
+      const update = await this.ReplyRepository.createQueryBuilder()
+        .update(Replies)
+        .set({
+          content: replyToUpdate.content,
+          image: replyToUpdate.image,
+          user: userId,
+        })
+        .where("id = :id", { id: replyId })
+        .execute();
       return res.status(200).json({ code: 200, data: update });
     } catch (error) {
       return res.status(500).json({ code: 500, error: error.message });

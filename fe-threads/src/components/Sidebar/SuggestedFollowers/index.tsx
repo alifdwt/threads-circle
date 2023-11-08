@@ -1,6 +1,4 @@
 import { Text, Card, Spinner } from "@chakra-ui/react";
-import FollowAPI from "@/types/FollowListAPI";
-import SuggestedFollowerContainer from "./Container";
 import { useEffect, useState } from "react";
 import { useFollows } from "@/hooks/Follow/useFollows";
 import useProfileSelector from "@/hooks/SelectedProfile/useProfileSelector";
@@ -30,7 +28,7 @@ const SuggestedFollower = () => {
     }
   }
 
-  const allIds = users.map((user) => user.id).sort();
+  const allIds = users.map((user) => user.id).filter((id) => id !== 0);
 
   for (let i = 0; i < allIds.length; i++) {
     const currentId = allIds[i];
@@ -38,16 +36,12 @@ const SuggestedFollower = () => {
       notFollowedIds.push(currentId);
     }
   }
-  // console.log(notFollowedIds);
 
   return (
     <Card bg="whiteAlpha.200" p={4}>
       <Text color={"white"} fontWeight={"bold"} mb={2}>
         Suggested for You
       </Text>
-      {/* {notFollowedIds?.map((datum) => (
-        <SuggestedFollowerContainer key={datum} followId={datum} />
-      ))} */}
       {selectedProfile === 0 ? (
         <Spinner />
       ) : (
@@ -57,9 +51,6 @@ const SuggestedFollower = () => {
           ))}
         </>
       )}
-      {/* {notFollowedIds?.map((datum) => (
-        <SuggestedUserContainer key={datum} userId={datum} />
-      ))} */}
     </Card>
   );
 };

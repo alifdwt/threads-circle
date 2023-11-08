@@ -16,7 +16,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import useProfileSelector from "@/hooks/SelectedProfile/useProfileSelector";
 import useCreateThread from "@/components/Navbar/CreateThread/hooks/useCreateThread";
 
-const ThreadFormNew = () => {
+const ThreadFormNew = (props: { identity: number; type: string }) => {
   const { selectedProfile } = useProfileSelector();
   const { getUser } = useUser({ userId: selectedProfile });
   const {
@@ -27,7 +27,10 @@ const ThreadFormNew = () => {
     handlePost,
     handleThreadChange,
     handleFileUpload,
-  } = useCreateThread();
+  } = useCreateThread({
+    identity: props.identity,
+    type: props.type,
+  });
 
   return (
     <Box>

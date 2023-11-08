@@ -8,7 +8,7 @@ const HomeTimeline = () => {
 
   return (
     <Box border={"1px solid gray"} borderRadius={"10px"}>
-      <ThreadFormNew />
+      <ThreadFormNew type="thread" identity={0} />
       <ThreadContainer threads={isLoading ? [] : getThreads} type="threads" />
     </Box>
   );

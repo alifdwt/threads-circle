@@ -24,6 +24,7 @@ import LikeAPI from "@/types/LikeListAPI";
 import ThreadLikesCard from "./ThreadResponseIcon/Likes";
 import ThreadRepliesCard from "./ThreadResponseIcon/Replies";
 import useThread from "./hooks/useThread";
+import ThreadFormNew from "../Home/ThreadForm";
 
 const ThreadPage = (props: { threadId: number }) => {
   const { threadId } = props;
@@ -123,7 +124,8 @@ const ThreadPageCard = (props: {
           />
         </HStack>
 
-        <ThreadReplyForm threadId={thread.id} />
+        {/* <ThreadReplyForm threadId={thread.id} /> */}
+        <ThreadFormNew identity={thread.id} type="reply" />
 
         <Stack mt={8}>
           {thread.replies[0] && (

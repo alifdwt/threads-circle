@@ -14,4 +14,7 @@ export default new (class FollowingController {
   createFollow(req: Request, res: Response) {
     FollowingService.createFollow(req, res);
   }
+  deleteFollow(req: Request, res: Response) {
+    FollowingService.deleteFollow(req, res);
+  }
 })();
