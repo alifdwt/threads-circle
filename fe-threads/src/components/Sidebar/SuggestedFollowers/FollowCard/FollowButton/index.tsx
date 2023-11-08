@@ -2,8 +2,10 @@ import { API } from "@/config/api";
 import useProfileSelector from "@/hooks/SelectedProfile/useProfileSelector";
 import { Link } from "@chakra-ui/react";
 import { useFollows } from "../hooks/useFollow";
+import { useState } from "react";
 
 const FollowButton = (props: { followingId: number }) => {
+  const [isHovering, setIsHovering] = useState(false);
   const { selectedProfile } = useProfileSelector();
   const { getFollows } = useFollows();
   const usersFollowed = getFollows
@@ -22,16 +24,26 @@ const FollowButton = (props: { followingId: number }) => {
       {isFollowed ? (
         <Link
           onClick={handleUnfollow}
-          //   href="#"
-          bg={"red"}
-          color={"white"}
+          fontWeight={"bold"}
+          variant={"outline"}
+          border={"1px solid gray"}
+          color={"gray"}
           px={5}
           py={2}
           borderRadius={"20px"}
           height={"40px"}
-          _hover={{ textDecoration: "none" }}
+          width={"120px"}
+          textAlign={"center"}
+          _hover={{
+            textDecoration: "none",
+            bg: "red.500",
+            color: "white",
+            border: "none",
+          }}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
         >
-          Unfollow
+          {isHovering ? "Unfollow" : "Following"}
         </Link>
       ) : (
         <Link
