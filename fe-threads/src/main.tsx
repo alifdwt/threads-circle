@@ -14,14 +14,22 @@ const store = configureStore({
 
 const theme = extendTheme({
   styles: {
-    global: {
+    global: (props) => ({
       body: {
-        bg: "darkBackgroud",
+        bg: props.colorMode === "dark" ? "darkBackground" : "lightBackground",
+        color: props.colorMode === "dark" ? "lightColor" : "darkColor",
       },
-    },
+    }),
   },
   colors: {
     darkBackgroud: "#262626",
+    lightBackgroud: "#f5f5f5",
+    // darkColor: "#f5f5f5",
+    // lightColor: "#262626",
+  },
+  config: {
+    // initialColorMode: "light",
+    useSystemColorMode: true,
   },
 });
 

@@ -9,7 +9,8 @@ import {
   Link,
   Stack,
   Text,
-  // useColorMode,
+  useColorMode,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { BiLogOut } from "react-icons/bi";
 import {
@@ -53,7 +54,8 @@ const navbarList: NavbarListType[] = [
 ];
 
 const Navbar = () => {
-  // const { colorMode, toggleColorMode } = useColorMode();
+  const color = useColorModeValue("black", "white");
+  const { colorMode, toggleColorMode } = useColorMode();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { selectedProfile } = useProfileSelector();
@@ -90,7 +92,7 @@ const Navbar = () => {
                 borderRadius={"15px"}
                 p={3}
               >
-                <HStack>
+                <HStack color={color}>
                   {item.icon}
                   <Text>{item.name}</Text>
                 </HStack>
@@ -111,9 +113,9 @@ const Navbar = () => {
           >
             Logout
           </Button>
-          {/* <Button onClick={toggleColorMode}>
+          <Button onClick={toggleColorMode}>
             Toggle {colorMode === "light" ? "Dark" : "Light"}
-          </Button> */}
+          </Button>
         </Box>
       </Flex>
     </Stack>

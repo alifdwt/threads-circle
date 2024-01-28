@@ -7,6 +7,7 @@ import {
   Button,
   ButtonGroup,
   IconButton,
+  // useColorModeValue,
 } from "@chakra-ui/react";
 import { BiChat } from "react-icons/bi";
 
@@ -14,28 +15,27 @@ const ThreadRepliesCard = (props: {
   replies_count: number;
   reply_data: ReplyAPI[];
 }) => {
+  // const color = useColorModeValue("black", "white");
   return (
     <ButtonGroup isAttached>
       <IconButton
         aria-label="Like"
         icon={<BiChat />}
-        color={"whiteAlpha.600"}
-        bg={"whiteAlpha.200"}
-        _hover={{ color: "#22c35e", bg: "white" }}
+        // color={"whiteAlpha.600"}
+        // bg={"whiteAlpha.200"}
+        // _hover={{ color: "#22c35e", bg: "white" }}
       />
       <Button
-        color="whiteAlpha.600"
+        // color="whiteAlpha.600"
         // mt={2}
-        bg={"whiteAlpha.200"}
+        // bg={"whiteAlpha.200"}
         p={3}
         borderRadius={"10px"}
         gap={3}
       >
         <HStack>
           {/* <BiChat size={20} /> */}
-          <Text fontSize="sm" color="whiteAlpha.600">
-            {props.replies_count}
-          </Text>
+          <Text fontSize="sm">{props.replies_count}</Text>
         </HStack>
         <AvatarGroup max={2} size={"xs"}>
           {props.replies_count > 0 &&

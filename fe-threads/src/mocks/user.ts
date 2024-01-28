@@ -10,8 +10,8 @@ const userDummy: UserListAPI[] = [
     profile_picture:
       "https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/SpongeBob_SquarePants_character.svg/220px-SpongeBob_SquarePants_character.svg.png",
     profile_description: "The main character of the show",
-    created_at: "2023-10-25T07:19:11.325Z",
-    updated_at: "2023-10-25T07:19:11.325Z",
+    created_at: "1000-01-01T00:00:00.000Z",
+    updated_at: "1000-01-01T00:00:00.000Z",
     threads: [
       {
         id: 14,

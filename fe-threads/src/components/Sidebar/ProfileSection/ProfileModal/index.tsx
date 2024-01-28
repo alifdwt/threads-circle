@@ -21,7 +21,7 @@ const ProfileModal = (props: {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Link onClick={onOpen} color={"white"}>
+      <Link onClick={onOpen}>
         <HStack>
           <Text fontWeight={"bold"}>{props.followCount}</Text>
           <Text color={"grey"}>{props.title}</Text>
@@ -31,11 +31,11 @@ const ProfileModal = (props: {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader color={"white"} bg={"blackAlpha.800"}>
+          <ModalHeader>
             {props.title[0].toUpperCase() + props.title.slice(1)}
           </ModalHeader>
-          <ModalCloseButton color={"white"} />
-          <ModalBody color={"white"} bg={"blackAlpha.800"}>
+          <ModalCloseButton />
+          <ModalBody>
             {props.followCount === 0 ? (
               <Text>There is no {props.title} yet!</Text>
             ) : (

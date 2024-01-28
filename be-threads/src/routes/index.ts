@@ -51,7 +51,12 @@ router.get(
   AuthMiddlewares.Authentication,
   UserControllers.checkUser
 );
-router.patch("/user/:userId", UserControllers.updateUser);
+router.patch(
+  "/user/:userId",
+  UploadMiddleware.handleUpload.bind(UploadMiddleware),
+  AuthMiddlewares.Authentication,
+  UserControllers.updateUser
+);
 router.delete("/user/:userId", UserControllers.deleteUser);
 
 // REPLY ROUTES

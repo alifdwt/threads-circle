@@ -2,7 +2,11 @@ import { Repository } from "typeorm";
 import { Users } from "../entities/users";
 import { AppDataSource } from "../data-source";
 import { Request, Response } from "express";
-import { createUserSchema, loginSchema } from "../utils/validator/users";
+import {
+  createUserSchema,
+  loginSchema,
+  updateUserSchema,
+} from "../utils/validator/users";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import { uploadToCloudinary } from "../utils/cloudinary/cloudinary";
@@ -222,6 +226,17 @@ export default new (class UserServices {
         return res.status(404).json({ code: 404, error: "User not found" });
       }
 
+      let imageResult;
+      if (req.file && req.file.filename) {
+        const image = req.file.filename;
+        imageResult = await uploadToCloudinary(
+          image,
+          `Circle/profile/${updateUser.username}/profile_picture`,
+          updateUser.username
+        );
+        deleteFile(req.file.filename);
+      }
+
       const user = await this.UserRepository.findOne({
         relations: {
           threads: true,
@@ -232,25 +247,69 @@ export default new (class UserServices {
       });
 
       if (updateUser.username == "") {
-        updateUser.username = user[0].username;
+        updateUser.username = user.username;
       }
       if (updateUser.full_name == "") {
-        updateUser.full_name = user[0].full_name;
+        updateUser.full_name = user.full_name;
       }
       if (updateUser.email == "") {
-        updateUser.email = user[0].email;
+        updateUser.email = user.email;
       }
-      if (updateUser.password == "") {
-        updateUser.password = user[0].password;
-      }
+      // if (updateUser.password == "") {
+      //   updateUser.password = user[0].password;
+      // }
       if (updateUser.profile_picture == "") {
-        updateUser.profile_picture = user[0].profile_picture;
+        updateUser.profile_picture = user.profile_picture;
+      }
+      if (imageResult) {
+        updateUser.profile_picture = imageResult;
       }
       if (updateUser.profile_description == "") {
-        updateUser.profile_description = user[0].profile_description;
+        updateUser.profile_description = user.profile_description;
       }
 
-      const update = await this.UserRepository.update(user, updateUser);
+      const { error, value } = updateUserSchema.validate(updateUser);
+      if (error) {
+        return res.status(400).json({ code: 400, error: error.message });
+      }
+
+      // const emailExists = await this.UserRepository.count({
+      //   where: {
+      //     email: value.email,
+      //   },
+      // });
+      // if (emailExists > 0) {
+      //   return res
+      //     .status(400)
+      //     .json({ code: 400, error: "Email already exists" });
+      // }
+
+      // const usernameExist = await this.UserRepository.count({
+      //   where: {
+      //     username: value.username,
+      //   },
+      // });
+      // if (usernameExist > 0) {
+      //   return res
+      //     .status(400)
+      //     .json({ code: 400, error: "Username already exists" });
+      // }
+
+      // const hashedPassword = await bcrypt.hash(value.password, 10);
+
+      const update = await this.UserRepository.createQueryBuilder()
+        .update(Users)
+        .set({
+          username: value.username,
+          full_name: value.full_name,
+          email: value.email,
+          password: user.password,
+          profile_picture: value.profile_picture,
+          profile_description: value.profile_description,
+        })
+        .where("id = :id", { id: userId })
+        .execute();
+
       return res.status(200).json({ code: 200, data: update });
     } catch (error) {
       return res.status(500).json({ code: 500, error: error.message });

@@ -20,9 +20,9 @@ const LikesModal = (props: { likes_count: number; like_data: LikeAPI[] }) => {
   return (
     <>
       <Button
-        color="whiteAlpha.600"
+        // color="whiteAlpha.600"
         // mt={2}
-        bg={"whiteAlpha.200"}
+        // bg={"whiteAlpha.200"}
         p={3}
         borderRadius={"10px"}
         gap={3}
@@ -30,9 +30,7 @@ const LikesModal = (props: { likes_count: number; like_data: LikeAPI[] }) => {
       >
         <HStack>
           {/* <BiSolidLike size={20} /> */}
-          <Text fontSize="sm" color="whiteAlpha.600">
-            {props.likes_count}
-          </Text>
+          <Text fontSize="sm">{props.likes_count}</Text>
         </HStack>
         <AvatarGroup max={2} size={"xs"}>
           {props.like_data?.map((like) => (

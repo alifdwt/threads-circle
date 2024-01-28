@@ -15,10 +15,10 @@ import {
   SkeletonText,
   Stack,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { BsArrowLeftShort, BsDot } from "react-icons/bs";
-import ThreadReplyForm from "./ThreadReplyForm";
 import { useNavigate } from "react-router-dom";
 import LikeAPI from "@/types/LikeListAPI";
 import ThreadLikesCard from "./ThreadResponseIcon/Likes";
@@ -45,7 +45,7 @@ const ThreadPage = (props: { threadId: number }) => {
   return (
     <Box border={"1px solid gray"} borderRadius={"10px"} p={5}>
       <Link onClick={() => navigate("/home")}>
-        <HStack color={"white"}>
+        <HStack color={"gray"}>
           <BsArrowLeftShort size={24} />
           {/* <Text fontWeight={"semibold"}>Replies</Text> */}
         </HStack>
@@ -53,7 +53,11 @@ const ThreadPage = (props: { threadId: number }) => {
       {isLoading ? (
         <Skeleton />
       ) : (
-        <ThreadPageCard thread={getThread} reply={reply} type="thread" />
+        <ThreadPageCard
+          thread={getThread as ThreadAPI}
+          reply={reply}
+          type="thread"
+        />
       )}
     </Box>
   );
@@ -65,6 +69,7 @@ const ThreadPageCard = (props: {
   type: string;
 }) => {
   const navigate = useNavigate();
+  const color = useColorModeValue("black", "white");
 
   const { thread, reply } = props;
 
@@ -82,11 +87,13 @@ const ThreadPageCard = (props: {
           onClick={() => navigate(`/profile/${thread.user?.username}`)}
         >
           <HStack>
-            <Text fontWeight={"semibold"}>{thread.user?.full_name}</Text>
+            <Text fontWeight={"semibold"} color={color}>
+              {thread.user?.full_name}
+            </Text>
           </HStack>
-          <Text color={"whiteAlpha.600"}>@{thread.user?.username}</Text>
+          <Text color={"gray"}>@{thread.user?.username}</Text>
         </Link>
-        <Text>{thread.content}</Text>
+        <Text color={color}>{thread.content}</Text>
         {thread.image && props.type !== "image" && (
           <Image
             src={thread.image as string}
@@ -100,7 +107,7 @@ const ThreadPageCard = (props: {
             display="flex"
             align="center"
             fontSize="xs"
-            color="whiteAlpha.600"
+            color={`${color}Alpha.600`}
           >
             {new Date(thread.created_at).toLocaleString()}
             <BsDot size={20} />

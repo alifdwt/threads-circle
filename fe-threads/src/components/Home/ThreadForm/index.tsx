@@ -10,6 +10,7 @@ import {
   Flex,
   Image,
   Spinner,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { BiImageAdd, BiListPlus, BiLocationPlus } from "react-icons/bi";
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -17,6 +18,7 @@ import useProfileSelector from "@/hooks/SelectedProfile/useProfileSelector";
 import useCreateThread from "@/components/Navbar/CreateThread/hooks/useCreateThread";
 
 const ThreadFormNew = (props: { identity: number; type: string }) => {
+  const color = useColorModeValue("black", "white");
   const { selectedProfile } = useProfileSelector();
   const { getUser } = useUser({ userId: selectedProfile });
   const {
@@ -51,14 +53,14 @@ const ThreadFormNew = (props: { identity: number; type: string }) => {
           py={"2rem"}
           onChange={handleThreadChange}
           name="content"
-          _focus={{ color: "white" }}
+          _focus={{ color: color }}
         />
       </InputGroup>
       <Flex
         justifyContent={"space-between"}
         p={2}
         borderBottom={"1px solid gray"}
-        bg={"#373737"}
+        bg={color === "black" ? "gray.200" : "gray.800"}
       >
         <Flex ml={5} gap={2}>
           {image && (

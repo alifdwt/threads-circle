@@ -4,7 +4,7 @@ import UserListAPI from "@/types/UserListAPI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, ChangeEvent } from "react";
 
-const useUpdateUser = () => {
+const useUpdateUser = (userId: number) => {
   const queryClient = useQueryClient();
   const [form, setForm] = useState<UserListAPI>({
     username: "",
@@ -30,30 +30,32 @@ const useUpdateUser = () => {
   };
 
   const mutation = useMutation({
-    mutationFn: (updateUser: any) => API.patch("/user", updateUser),
+    mutationFn: (updateUser: any) => API.patch(`/user/${userId}`, updateUser),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
       toast("Success", "Profile updated successfully", "success");
+      queryClient.invalidateQueries({ queryKey: ["edit-user"] });
     },
     onError: (error: any) => {
+      console.log(error);
       toast("Error", error.response.data.error, "error");
     },
   });
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setForm({
-      ...form,
-      [event.target.name]: event.target.value,
-    });
+  const handleChange = (fieldName: string, value: string) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      [fieldName]: value,
+    }));
   };
 
   const handleUpdateUser = () => {
     formData.append("username", form.username);
     formData.append("full_name", form.full_name);
     formData.append("email", form.email);
-    formData.append("password", form.password);
-    formData.append("profile_picture", image as File);
+    // formData.append("password", form.password);
+    formData.append("image", image as File);
     formData.append("profile_description", form.profile_description);
+    console.log(...formData);
 
     mutation.mutate(formData);
 
@@ -82,11 +84,12 @@ const useUpdateUser = () => {
     passwordError,
     passwordValue,
     image,
+    setImage,
     handleChange,
     handleUpdateUser,
     handlePasswordChange,
-    handleFileChange,
     handleFileUpload,
+    mutation,
   };
 };
 

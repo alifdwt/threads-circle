@@ -15,7 +15,7 @@ const SearchBox = (props: {
         type="text"
         placeholder="Search..."
         borderRadius={"full"}
-        bg={"whiteAlpha.300"}
+        // bg={"whiteAlpha.300"}
         value={props.searchTerm}
         onChange={(e) => props.onSearch(e.target.value)}
       />

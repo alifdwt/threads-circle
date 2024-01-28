@@ -8,6 +8,7 @@ import {
   Spinner,
   Stack,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { VscVerifiedFilled } from "react-icons/vsc";
 import ProfileModal from "./ProfileModal";
@@ -17,6 +18,7 @@ import useProfileSelector from "@/hooks/SelectedProfile/useProfileSelector";
 import FollowButton from "../SuggestedFollowers/FollowCard/FollowButton";
 
 const CardProfile = ({ userData }: { userData: UserListAPI | undefined }) => {
+  const color = useColorModeValue("black", "white");
   const { selectedProfile } = useProfileSelector();
   return (
     <Card bg="whiteAlpha.200" p={4}>
@@ -56,7 +58,7 @@ const CardProfile = ({ userData }: { userData: UserListAPI | undefined }) => {
                 mt={3}
                 fontSize="lg"
                 fontWeight="semibold"
-                color="white"
+                // color="white"
                 display={"flex"}
                 alignItems={"center"}
                 gap={1}
@@ -70,13 +72,13 @@ const CardProfile = ({ userData }: { userData: UserListAPI | undefined }) => {
               </Text>
               <Text
                 fontSize="xs"
-                color="whiteAlpha.600"
+                color={`${color}Alpha.600`}
                 _hover={{ textDecoration: "underline" }}
               >
                 @{userData.username}
               </Text>
             </Link>
-            <Text fontSize="sm" color="whiteAlpha.800" mb={"10px"}>
+            <Text fontSize="sm" color={`${color}Alpha.800`} mb={"10px"}>
               {userData.profile_description}
             </Text>
             <HStack fontSize="sm">

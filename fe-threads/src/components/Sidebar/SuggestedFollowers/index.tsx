@@ -39,7 +39,7 @@ const SuggestedFollower = () => {
 
   return (
     <Card bg="whiteAlpha.200" p={4}>
-      <Text color={"white"} fontWeight={"bold"} mb={2}>
+      <Text fontWeight={"bold"} mb={2}>
         Suggested for You
       </Text>
       {selectedProfile === 0 ? (

@@ -9,14 +9,14 @@ const Home = () => {
     <Box>
       {/* <ProfileSelector /> */}
       <Box>
-        <Flex color="white" p={"20px"} gap={4}>
-          <Box flex={"1"}>
+        <Flex p={"20px"} gap={4}>
+          <Box flex={"1"} hideBelow={"md"}>
             <Navbar />
           </Box>
           <Box flex={"2"}>
             <HomeTimeline />
           </Box>
-          <Box flex={"1"}>
+          <Box flex={"1"} hideBelow={"md"}>
             <Sidebar />
           </Box>
         </Flex>

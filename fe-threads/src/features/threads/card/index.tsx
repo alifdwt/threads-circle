@@ -10,6 +10,7 @@ import {
   LinkBox,
   LinkOverlay,
   Button,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { BiSolidLike, BiChat, BiShare } from "react-icons/bi";
 import ThreadAPI from "@/types/ThreadCardAPI";
@@ -57,6 +58,7 @@ const ThreadContainer = (props: {
 };
 
 const ThreadCard = (props: { datum: ThreadAPI; type: string }) => {
+  const color = useColorModeValue("black", "white");
   const navigate = useNavigate();
 
   const { id, content, image, user, replies, created_at, updated_at, likes } =
@@ -114,58 +116,58 @@ const ThreadCard = (props: { datum: ThreadAPI; type: string }) => {
               display={"flex"}
               gap={1}
               fontWeight={"semibold"}
-              color={"whiteAlpha.800"}
+              color={`${color}Alpha.800`}
             >
               {user?.full_name}
             </Text>
             <Text
               fontWeight={"light"}
               display={"flex"}
-              color={"whiteAlpha.600"}
+              color={`${color}Alpha.600`}
             >
               @{user?.username}
               {created_at !== updated_at && <AiOutlineEdit />}
-              <BsDot color={"whiteAlpha.600"} size={24} />
+              <BsDot color={`${color}Alpha.600`} size={24} />
               {getDuration(updated_at)}
             </Text>
           </Button>
           <Text w={"600px"}>
-            <Text>{TextWithAnchor({ text: content })}</Text>
+            <Text color={color}>{TextWithAnchor({ text: content })}</Text>
             {image !== "null" && <Image src={image as string} maxW={"60%"} />}
           </Text>
           {props.type === "threads" && (
             <HStack spacing={6}>
               {isLiked ? (
                 <Button onClick={handleDislike} variant={"link"}>
-                  <HStack color="whiteAlpha.600" mt={2}>
+                  <HStack color={`${color}Alpha.600`} mt={2}>
                     <BiSolidLike size={20} color={isLiked ? "#22c35e" : ""} />
-                    <Text fontSize="sm" color="whiteAlpha.600">
+                    <Text fontSize="sm" color={`${color}Alpha.600`}>
                       {likes?.length}
                     </Text>
                   </HStack>
                 </Button>
               ) : (
                 <Button onClick={handleLike} variant={"link"}>
-                  <HStack color="whiteAlpha.600" mt={2}>
+                  <HStack color={`${color}Alpha.600`} mt={2}>
                     <BiSolidLike size={20} color={isLiked ? "#22c35e" : ""} />
-                    <Text fontSize="sm" color="whiteAlpha.600">
+                    <Text fontSize="sm" color={`${color}Alpha.600`}>
                       {likes?.length}
                     </Text>
                   </HStack>
                 </Button>
               )}
               <Button variant={"link"}>
-                <HStack color="whiteAlpha.600" mt={2}>
+                <HStack color={`${color}Alpha.600`} mt={2}>
                   <BiChat size={20} />
-                  <Text fontSize="sm" color="whiteAlpha.600">
+                  <Text fontSize="sm" color={`${color}Alpha.600`}>
                     {replies?.length}
                   </Text>
                 </HStack>
               </Button>
               <Button variant={"link"}>
-                <HStack color="whiteAlpha.600" mt={2}>
+                <HStack color={`${color}Alpha.600`} mt={2}>
                   <BiShare size={20} />
-                  <Text fontSize="sm" color="whiteAlpha.600">
+                  <Text fontSize="sm" color={`${color}Alpha.600`}>
                     Share
                   </Text>
                 </HStack>

@@ -16,10 +16,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import useUpdateUser from "./hooks/useUpdateUser";
 
 const EditProfile = (props: { user: UserListAPI }) => {
@@ -32,26 +33,25 @@ const EditProfile = (props: { user: UserListAPI }) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    passwordError,
-    passwordValue,
     image,
+    setImage,
     handleChange,
     handleUpdateUser,
     handlePasswordChange,
-    handleFileChange,
     handleFileUpload,
-  } = useUpdateUser();
+    mutation,
+  } = useUpdateUser(props.user.id as number);
 
   return (
     <>
       <Button
-        color="white"
+        // color="white"
         size="xs"
         rounded="full"
         variant="outline"
         mt={8}
         w="fit-content"
-        _hover={{ bg: "gray" }}
+        _hover={{ bg: "gray.500" }}
         onClick={onOpen}
       >
         Edit Profile
@@ -78,9 +78,6 @@ const EditProfile = (props: { user: UserListAPI }) => {
               <Box
                 h={"fit-content"}
                 position={"relative"}
-                bg={"black"}
-                rounded={"full"}
-                p={1.5}
                 left={4}
                 bottom={-12}
               >
@@ -90,16 +87,31 @@ const EditProfile = (props: { user: UserListAPI }) => {
                   position="absolute"
                   top={-3}
                   right={-3}
-                  // onClick={() => setImage(null)}
+                  onClick={() => setImage(null)}
                   color={"white"}
                 >
                   <CloseButton />
                 </Button>
-                <Avatar
-                  name={fullName}
-                  src={props.user.profile_picture}
-                  size={"xl"}
-                />
+                <Box
+                  as={Button}
+                  bg="transparent"
+                  variant={"link"}
+                  onClick={handleFileUpload}
+                >
+                  <Avatar
+                    name={fullName}
+                    src={
+                      !image
+                        ? props.user.profile_picture
+                        : URL.createObjectURL(image)
+                    }
+                    size={"xl"}
+                    border={"3px solid black"}
+                    _hover={{
+                      border: "3px solid #22c35e",
+                    }}
+                  />
+                </Box>
               </Box>
             </Flex>
             <Flex mt={12} flexDirection={"column"} gap={4}>
@@ -108,7 +120,10 @@ const EditProfile = (props: { user: UserListAPI }) => {
                 <Input
                   type="text"
                   value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  onChange={(e) => {
+                    setFullName(e.target.value);
+                    handleChange("full_name", e.target.value);
+                  }}
                 />
               </FormControl>
               <FormControl>
@@ -116,7 +131,10 @@ const EditProfile = (props: { user: UserListAPI }) => {
                 <Input
                   type="text"
                   value={profileDescription}
-                  onChange={(e) => setProfileDescription(e.target.value)}
+                  onChange={(e) => {
+                    setProfileDescription(e.target.value);
+                    handleChange("profile_description", e.target.value);
+                  }}
                 />
               </FormControl>
               <FormControl>
@@ -124,7 +142,10 @@ const EditProfile = (props: { user: UserListAPI }) => {
                 <Input
                   type="text"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    handleChange("username", e.target.value);
+                  }}
                 />
               </FormControl>
 
@@ -135,7 +156,10 @@ const EditProfile = (props: { user: UserListAPI }) => {
                 <Input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    handleChange("email", e.target.value);
+                  }}
                 />
               </FormControl>
               <FormControl>
@@ -149,8 +173,15 @@ const EditProfile = (props: { user: UserListAPI }) => {
           </ModalBody>
 
           <ModalFooter bg="blackAlpha.800">
-            <Button mr={3} colorScheme="whatsapp">
-              Save Changes
+            <Button
+              mr={3}
+              colorScheme="whatsapp"
+              onClick={() => {
+                handleUpdateUser();
+                mutation.isSuccess ? onClose() : null;
+              }}
+            >
+              {mutation.isPending ? <Spinner /> : "Save Changes"}
             </Button>
             <Button onClick={onClose} colorScheme="red">
               Cancel

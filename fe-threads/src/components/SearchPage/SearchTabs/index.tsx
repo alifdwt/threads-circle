@@ -10,6 +10,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
 const SearchTabs = (props: {
@@ -17,6 +18,7 @@ const SearchTabs = (props: {
   userData: UserListAPI[];
   threadData: ThreadAPI[];
 }) => {
+  const color = useColorModeValue("black", "white");
   const filteredUser = props.userData.filter((user) =>
     user.username.toLowerCase().includes(props.searchTerm.toLowerCase())
   );
@@ -30,8 +32,12 @@ const SearchTabs = (props: {
   return (
     <Tabs isFitted>
       <TabList>
-        <Tab _selected={{ color: "white", bg: "green.400" }}>Users</Tab>
-        <Tab _selected={{ color: "white", bg: "green.400" }}>Threads</Tab>
+        <Tab _selected={{ color: "white", bg: "green.400" }} color={color}>
+          Users
+        </Tab>
+        <Tab _selected={{ color: "white", bg: "green.400" }} color={color}>
+          Threads
+        </Tab>
       </TabList>
 
       <TabPanels>
